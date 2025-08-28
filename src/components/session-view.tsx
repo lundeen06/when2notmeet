@@ -57,7 +57,6 @@ const DAY_LABELS: { [key: string]: string } = {
 
 export function SessionView({ sessionId }: SessionViewProps) {
   const [sessionData, setSessionData] = useState<SessionData | null>(null)
-  const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [hoveredSlot, setHoveredSlot] = useState<{day: string, hour: number, minute: number} | null>(null)
   const [eventTitle, setEventTitle] = useState<string | null>(null)
@@ -86,8 +85,6 @@ export function SessionView({ sessionId }: SessionViewProps) {
         }
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Unknown error')
-      } finally {
-        setLoading(false)
       }
     }
 
@@ -95,7 +92,9 @@ export function SessionView({ sessionId }: SessionViewProps) {
   }, [sessionId])
 
   const joinSchedule = () => {
-    router.push(`/?join=${sessionId}`)
+    setTimeout(() => {
+      router.push(`/?join=${sessionId}`)
+    }, 50)
   }
 
   const handleSignIn = () => {
@@ -106,13 +105,27 @@ export function SessionView({ sessionId }: SessionViewProps) {
       schedule => schedule.name.toLowerCase() === signInName.trim().toLowerCase()
     )
     
-    if (existingSchedule) {
-      // Navigate to edit existing schedule
-      router.push(`/schedule/${sessionId}?name=${encodeURIComponent(signInName)}&edit=${existingSchedule.id}&days=${existingSchedule.selectedDays.join(',')}&startTime=${startTime}&endTime=${endTime}&eventTitle=${encodeURIComponent(eventTitle || '')}`)
-    } else {
-      // Navigate to create new schedule with the name pre-filled
-      router.push(`/?join=${sessionId}&name=${encodeURIComponent(signInName)}`)
-    }
+    
+    setTimeout(() => {
+      if (existingSchedule) {
+        // Navigate to edit existing schedule
+        router.push(`/schedule/${sessionId}?name=${encodeURIComponent(signInName)}&edit=${existingSchedule.id}&days=${existingSchedule.selectedDays.join(',')}&startTime=${startTime}&endTime=${endTime}&eventTitle=${encodeURIComponent(eventTitle || '')}`)
+      } else {
+        // Get session data to create new schedule with existing session settings
+        const allDaysSet = new Set<string>()
+        sessionData?.schedules.forEach(schedule => {
+          schedule.selectedDays.forEach(day => allDaysSet.add(day))
+        })
+        const sessionDays = Array.from(allDaysSet).sort((a, b) => {
+          const order = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
+          return order.indexOf(a) - order.indexOf(b)
+        })
+        
+        // Navigate directly to scheduling page for new user
+        router.push(`/schedule/${sessionId}?name=${encodeURIComponent(signInName)}&days=${sessionDays.join(',')}&startTime=${startTime}&endTime=${endTime}&eventTitle=${encodeURIComponent(eventTitle || '')}`)
+      }
+    }, 50)
+    
     setIsSignInOpen(false)
   }
 
@@ -146,11 +159,11 @@ export function SessionView({ sessionId }: SessionViewProps) {
   const getOverlapColor = (intensity: number) => {
     // Intensity represents how many people are busy (0 = nobody busy, 1 = everyone busy)
     // We want to show availability, so invert the logic
-    if (intensity === 0) return 'bg-blue-500'    // Everyone available - dark blue
-    if (intensity <= 0.3) return 'bg-blue-400'   // Most available - medium blue  
-    if (intensity <= 0.6) return 'bg-blue-300'   // Some available - lighter blue
-    if (intensity <= 0.8) return 'bg-blue-200'   // Few available - light blue
-    return 'bg-blue-100'  // Nobody available - very light blue
+    if (intensity === 0) return 'bg-green-500'    // Everyone available - dark green
+    if (intensity <= 0.3) return 'bg-green-400'   // Most available - medium green  
+    if (intensity <= 0.6) return 'bg-green-300'   // Some available - lighter green
+    if (intensity <= 0.8) return 'bg-green-200'   // Few available - light green
+    return 'white'  // Nobody available - very light green
   }
 
   const getAllDays = () => {
@@ -177,15 +190,6 @@ export function SessionView({ sessionId }: SessionViewProps) {
       }
     }
   }
-
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <div className="text-lg text-gray-600">Loading session data...</div>
-      </div>
-    )
-  }
-
   if (error) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
@@ -217,7 +221,7 @@ export function SessionView({ sessionId }: SessionViewProps) {
   return (
     <div className="space-y-6">
       {eventTitle && (
-        <div className="text-center">
+        <div className="text-center pt-6">
           <h2 className="text-2xl font-bold text-black mb-2">{eventTitle}</h2>
         </div>
       )}
@@ -242,13 +246,13 @@ export function SessionView({ sessionId }: SessionViewProps) {
           
           <Dialog open={isSignInOpen} onOpenChange={setIsSignInOpen}>
             <DialogTrigger asChild>
-              <Button className="bg-green-600 text-white hover:bg-green-700">
-                Sign In & Join
+              <Button className="bg-black text-white hover:bg-gray-800">
+                Join / Edit Schedule
               </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-md">
               <DialogHeader>
-                <DialogTitle>Join This Schedule</DialogTitle>
+                <DialogTitle>Join / Edit Schedule</DialogTitle>
               </DialogHeader>
               <div className="space-y-4 pt-4">
                 <div>
@@ -277,42 +281,30 @@ export function SessionView({ sessionId }: SessionViewProps) {
                     disabled={!signInName.trim()}
                     className="bg-black text-white hover:bg-gray-800"
                   >
-                    Join Schedule
+                    Continue
                   </Button>
                 </div>
               </div>
             </DialogContent>
           </Dialog>
-          
-          <Button
-            onClick={joinSchedule}
-            variant="outline"
-            className="border-black text-black hover:bg-gray-50"
-          >
-            Join This Schedule
-          </Button>
         </div>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-xl text-black">Availability Overview</CardTitle>
-          <div className="flex items-center gap-4 text-sm text-gray-600">
+          <CardTitle className="text-xl text-black">Group Availability  t(-_-t)</CardTitle>
+          <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-xs sm:text-sm text-gray-600">
             <div className="flex items-center gap-2">
-              <div className="w-4 h-4 bg-blue-500"></div>
+              <div className="w-4 h-4 bg-green-500"></div>
               <span>Everyone available</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-4 h-4 bg-blue-300"></div>
+              <div className="w-4 h-4 bg-green-300"></div>
               <span>Most available</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-4 h-4 bg-blue-200"></div>
+              <div className="w-4 h-4 bg-green-200"></div>
               <span>Few available</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-4 h-4 bg-blue-100"></div>
-              <span>Nobody available</span>
             </div>
           </div>
         </CardHeader>
@@ -321,14 +313,14 @@ export function SessionView({ sessionId }: SessionViewProps) {
             <div 
               className="grid gap-0.5 mx-auto"
               style={{
-                gridTemplateColumns: `80px repeat(${allDays.length}, 1fr)`,
-                minWidth: '600px',
-                maxWidth: '1000px'
+                gridTemplateColumns: `60px repeat(${allDays.length}, minmax(80px, 1fr))`,
+                minWidth: allDays.length <= 5 ? '300px' : '500px',
+                maxWidth: `${Math.min(1200, 60 + allDays.length * 320)}px`
               }}
             >
               <div className="h-6"></div>
               {allDays.map((day) => (
-                <div key={day} className="h-6 flex items-center justify-center font-medium text-black text-sm">
+                <div key={day} className="h-6 flex items-center justify-center font-medium text-black text-xs sm:text-sm">
                   {DAY_LABELS[day]}
                 </div>
               ))}
@@ -336,7 +328,11 @@ export function SessionView({ sessionId }: SessionViewProps) {
               {filteredTimeSlots.map((timeSlot) => (
                 <div key={timeSlot.value} className="contents">
                   <div className="h-5 flex items-center text-xs text-gray-600 pr-1">
-                    {timeSlot.label}
+                    <span className="hidden sm:inline">{timeSlot.label}</span>
+                    <span className="sm:hidden text-xs">
+                      {timeSlot.hour === 0 ? '12' : timeSlot.hour > 12 ? timeSlot.hour - 12 : timeSlot.hour}
+                      {timeSlot.hour < 12 ? 'a' : 'p'}
+                    </span>
                   </div>
                   {allDays.map((day) => {
                     const intensity = getOverlapIntensity(day, timeSlot.hour, timeSlot.minute)
@@ -359,8 +355,8 @@ export function SessionView({ sessionId }: SessionViewProps) {
       </Card>
 
       {hoveredSlot && (
-        <Card className="mt-4 bg-gray-50">
-          <CardContent className="pt-4">
+        <Card className="mt-2 bg-gray-50 py-2">
+          <CardContent className="pt-2 pb-2">
             <div className="text-sm">
               <div className="font-medium text-black mb-2">
                 {DAY_LABELS[hoveredSlot.day]} at {
@@ -378,20 +374,18 @@ export function SessionView({ sessionId }: SessionViewProps) {
                 const busyPeople = totalPeople - availablePeople.length
                 
                 return (
-                  <div className="space-y-2">
+                  <div className="flex items-center gap-4 flex-wrap">
                     {availablePeople.length > 0 ? (
-                      <div>
+                      <span>
                         <span className="text-green-700 font-medium">Available ({availablePeople.length}):</span>
-                        <span className="ml-2 text-gray-700">{availablePeople.join(', ')}</span>
-                      </div>
+                        <span className="ml-1 text-gray-700">{availablePeople.join(', ')}</span>
+                      </span>
                     ) : (
-                      <div className="text-red-700 font-medium">No one is available</div>
+                      <span className="text-red-700 font-medium">No one available</span>
                     )}
                     
                     {busyPeople > 0 && (
-                      <div>
-                        <span className="text-red-700 font-medium">Busy: {busyPeople} person{busyPeople !== 1 ? 's' : ''}</span>
-                      </div>
+                      <span className="text-red-700 font-medium">Busy: {busyPeople}</span>
                     )}
                   </div>
                 )

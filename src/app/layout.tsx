@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { Sidebar } from "@/components/sidebar";
+import { Footer } from "@/components/footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -13,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "WhenNot2Meet",
+  title: "when2notmeet",
   description: "A clean scheduling app - mark when you're NOT available to find the best meeting times",
 };
 
@@ -28,7 +30,15 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         suppressHydrationWarning={true}
       >
-        {children}
+          <div className="flex h-screen">
+            <Sidebar />
+            <div className="flex-1 flex flex-col">
+              <main className="flex-1 overflow-auto">
+                {children}
+              </main>
+              <Footer />
+            </div>
+          </div>
       </body>
     </html>
   );

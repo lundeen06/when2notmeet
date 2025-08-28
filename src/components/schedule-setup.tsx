@@ -43,7 +43,6 @@ export function ScheduleSetup() {
   const [startTime, setStartTime] = useState<number>(16) // 8:00 AM (8 * 2 = 16)
   const [endTime, setEndTime] = useState<number>(36) // 6:00 PM (18 * 2 = 36)
   const [sessionTimeRange, setSessionTimeRange] = useState<{start: number, end: number} | null>(null)
-  const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -54,7 +53,6 @@ export function ScheduleSetup() {
     const fetchSessionData = async () => {
       if (!joinSessionId) return
       
-      setLoading(true)
       setError(null)
       
       try {
@@ -92,8 +90,6 @@ export function ScheduleSetup() {
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to fetch session')
         setSessionDays(null)
-      } finally {
-        setLoading(false)
       }
     }
 
@@ -121,14 +117,16 @@ export function ScheduleSetup() {
 
     const sessionId = joinSessionId || uuidv4()
     
-    router.push(`/schedule/${sessionId}?name=${encodeURIComponent(name)}&days=${selectedDays.join(',')}&startTime=${startTime}&endTime=${endTime}&eventTitle=${encodeURIComponent(eventTitle)}`)
+    setTimeout(() => {
+      router.push(`/schedule/${sessionId}?name=${encodeURIComponent(name)}&days=${selectedDays.join(',')}&startTime=${startTime}&endTime=${endTime}&eventTitle=${encodeURIComponent(eventTitle)}`)
+    }, 50)
   }
 
   return (
-    <Card>
+    <Card className="py-2">
       <CardHeader>
-        <CardTitle className="text-xl text-black">
-          {joinSessionId ? 'Join Schedule' : 'Create Your Schedule'}
+        <CardTitle className="text-xl text-black pt-4">
+          {joinSessionId ? 'Join Schedule' : 'Create Your Event  (☞ﾟ∀ﾟ)☞'}
         </CardTitle>
         {joinSessionId && (
           <p className="text-sm text-gray-600">
@@ -141,7 +139,7 @@ export function ScheduleSetup() {
           </p>
         )}
       </CardHeader>
-      <CardContent>
+      <CardContent className="pb-4">
         <form onSubmit={handleSubmit} className="space-y-6">
           {!joinSessionId && (
             <div>
@@ -185,12 +183,6 @@ export function ScheduleSetup() {
               required
             />
           </div>
-
-          {loading ? (
-            <div className="text-center py-4">
-              <div className="text-sm text-gray-600">Loading session details...</div>
-            </div>
-          ) : (
             <div>
               <label className="block text-sm font-medium text-black mb-3">
                 {joinSessionId && sessionDays ? 'Session Days' : 'Select Days'}
@@ -228,9 +220,7 @@ export function ScheduleSetup() {
                 </p>
               )}
             </div>
-          )}
 
-          {!loading && (
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-black mb-2">
@@ -282,20 +272,16 @@ export function ScheduleSetup() {
                 </p>
               )}
             </div>
-          )}
 
           <Button
             type="submit"
-            disabled={!name.trim() || selectedDays.length === 0 || loading || (!eventTitle.trim() && !joinSessionId)}
+            disabled={false}
+            // disabled={!name.trim() || selectedDays.length === 0 || (!eventTitle.trim() && !joinSessionId)}
             className="w-full bg-black text-white hover:bg-gray-800"
           >
-            {loading 
-              ? 'Loading...' 
-              : joinSessionId 
-                ? 'Join Session' 
-                : 'Continue to Schedule'
-            }
+            Create Event
           </Button>
+            
         </form>
       </CardContent>
     </Card>

@@ -22,10 +22,6 @@ export default function SchedulePage() {
     setIsLoaded(true)
   }, [])
 
-  if (!isLoaded) {
-    return <div>Loading...</div>
-  }
-
   if (!name || selectedDays.length === 0) {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
@@ -38,18 +34,17 @@ export default function SchedulePage() {
   }
 
   return (
-    <div className="min-h-screen bg-white">
-      <div className="container mx-auto py-8 px-4">
+    <div className="bg-white min-h-0">
+      <div className="container mx-auto py-4 px-4 max-h-[calc(100vh-80px)] overflow-auto">
         <div className="max-w-4xl mx-auto">
-          <div className="mb-6 text-center">
-            <h1 className="text-3xl font-bold text-black mb-2">WhenNot2Meet</h1>
+          <div className="mb-6 text-center pt-6">
             {eventTitle && (
-              <h2 className="text-xl font-semibold text-black mb-3">{eventTitle}</h2>
+              <h2 className="text-lg sm:text-xl font-semibold text-black mb-3">{eventTitle}</h2>
             )}
-            <p className="text-gray-600">
+            <p className="text-sm sm:text-base text-gray-600">
               Mark the times when you are <span className="font-semibold text-red-600">NOT</span> available
             </p>
-            <p className="text-sm text-gray-500 mt-2">
+            <p className="text-xs sm:text-sm text-gray-500 mt-2">
               Session for: <span className="font-medium text-black">{name}</span>
             </p>
           </div>
