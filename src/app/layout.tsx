@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { Sidebar } from "@/components/sidebar";
+import { ResponsiveNavigation } from "@/components/responsive-navigation";
 import { Footer } from "@/components/footer";
 
 const geistSans = Geist({
@@ -31,7 +31,7 @@ export default function RootLayout({
         suppressHydrationWarning={true}
       >
           <div className="flex h-screen">
-            <Sidebar />
+            <ResponsiveNavigation />
             <div className="flex-1 flex flex-col">
               <main className="flex-1 overflow-auto">
                 {children}
