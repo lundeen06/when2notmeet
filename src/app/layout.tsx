@@ -30,9 +30,9 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         suppressHydrationWarning={true}
       >
-          <div className="flex h-screen">
+          <div className="md:flex h-screen">
             <ResponsiveNavigation />
-            <div className="flex-1 flex flex-col">
+            <div className="flex-1 flex flex-col md:pt-0 pt-12">
               <main className="flex-1 overflow-auto">
                 {children}
               </main>

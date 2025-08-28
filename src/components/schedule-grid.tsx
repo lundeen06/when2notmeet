@@ -3,6 +3,7 @@
 import { useState, useCallback, useRef, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 
 interface ScheduleGridProps {
@@ -46,8 +47,21 @@ export function ScheduleGrid({ sessionId, userName, selectedDays, startTime, end
   const [dragStart, setDragStart] = useState<{day: string, hour: number, minute: number} | null>(null)
   const [dragEnd, setDragEnd] = useState<{day: string, hour: number, minute: number} | null>(null)
   const [previewSlots, setPreviewSlots] = useState<Set<string>>(new Set())
+  const [currentMobileDay, setCurrentMobileDay] = useState(0)
+  const [isMobile, setIsMobile] = useState(false)
   const gridRef = useRef<HTMLDivElement>(null)
   const router = useRouter()
+  
+  // Detect mobile screen size
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768)
+    }
+    
+    handleResize()
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
 
   const filteredTimeSlots = TIME_SLOTS.slice(startTime, endTime + 1)
 
@@ -197,6 +211,169 @@ export function ScheduleGrid({ sessionId, userName, selectedDays, startTime, end
     }
   }
 
+  // Handle touch events for mobile
+  const handleTouchStart = useCallback((day: string, hour: number, minute: number) => {
+    if (!isMobile) return
+    handleMouseDown(day, hour, minute)
+  }, [isMobile, handleMouseDown])
+
+  const handleTouchMove = useCallback((e: React.TouchEvent) => {
+    if (!isMobile || !isDragging) return
+    
+    e.preventDefault()
+    const touch = e.touches[0]
+    const element = document.elementFromPoint(touch.clientX, touch.clientY) as HTMLElement
+    
+    if (element && element.dataset && element.dataset.day && element.dataset.hour && element.dataset.minute) {
+      const day = element.dataset.day
+      const hour = parseInt(element.dataset.hour)
+      const minute = parseInt(element.dataset.minute)
+      handleMouseEnter(day, hour, minute)
+    }
+  }, [isMobile, isDragging, handleMouseEnter])
+
+  if (isMobile) {
+    const canGoPrev = currentMobileDay > 0
+    const canGoNext = currentMobileDay < selectedDays.length - 1
+    
+    // Show only current day on mobile with navigation
+    const mobileSelectedDays = [selectedDays[currentMobileDay]]
+    
+    return (
+      <Card>
+        <CardHeader className="pb-2">
+          <CardTitle className="text-base text-black">
+            Select Your Unavailable Times
+          </CardTitle>
+          <p className="text-xs text-gray-600">
+            Tap and drag to mark times when you are busy (red = not available)
+          </p>
+          
+          {/* Mobile Day Navigation */}
+          <div className="flex items-center justify-between pt-2 border-t mt-2">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setCurrentMobileDay(currentMobileDay - 1)}
+              disabled={!canGoPrev}
+              className="p-1"
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </Button>
+            
+            <div className="text-center">
+              <div className="font-medium text-black text-sm">
+                {DAY_LABELS[selectedDays[currentMobileDay]]}
+              </div>
+              <div className="text-xs text-gray-500">
+                {currentMobileDay + 1} of {selectedDays.length}
+              </div>
+            </div>
+            
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setCurrentMobileDay(currentMobileDay + 1)}
+              disabled={!canGoNext}
+              className="p-1"
+            >
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+          </div>
+        </CardHeader>
+        
+        <CardContent className="pt-2">
+          <div className="overflow-x-auto">
+            <div 
+              ref={gridRef}
+              className="grid gap-px select-none mx-auto"
+              style={{
+                gridTemplateColumns: `45px 1fr`,
+                minWidth: '280px',
+                maxWidth: '320px'
+              }}
+              onTouchMove={handleTouchMove}
+            >
+              <div className="h-4"></div>
+              <div className="h-4 flex items-center justify-center font-medium text-black text-sm">
+                {DAY_LABELS[selectedDays[currentMobileDay]]}
+              </div>
+              
+              {filteredTimeSlots.map((timeSlot) => (
+                <div key={timeSlot.value} className="contents">
+                  <div className="h-5 flex items-center text-xs text-gray-600 pr-1">
+                    <span className="text-xs">
+                      {timeSlot.hour === 0 ? '12' : timeSlot.hour > 12 ? timeSlot.hour - 12 : timeSlot.hour}
+                      :{timeSlot.minute === 0 ? '00' : '30'}
+                      {timeSlot.hour < 12 ? 'a' : 'p'}
+                    </span>
+                  </div>
+                  {mobileSelectedDays.map((day) => {
+                    const slotKey = getSlotKey(day, timeSlot.hour, timeSlot.minute)
+                    const isBusy = busySlots.has(slotKey)
+                    const isInPreview = previewSlots.has(slotKey) && isDragging
+                    
+                    let className = 'h-5 border border-gray-200 cursor-pointer transition-colors touch-manipulation '
+                    
+                    if (isInPreview) {
+                      const willBeAdded = dragMode === 'add' && !isBusy
+                      const willBeRemoved = dragMode === 'remove' && isBusy
+                      
+                      if (willBeAdded) {
+                        className += 'bg-red-400 border-red-600 border-2' 
+                      } else if (willBeRemoved) {
+                        className += 'bg-gray-300 border-gray-500 border-2'
+                      } else if (isBusy) {
+                        className += 'bg-red-500'
+                      } else {
+                        className += 'bg-white'
+                      }
+                    } else if (isBusy) {
+                      className += 'bg-red-500 active:bg-red-600'
+                    } else {
+                      className += 'bg-white active:bg-gray-100'
+                    }
+                    
+                    return (
+                      <div
+                        key={slotKey}
+                        className={className}
+                        data-day={day}
+                        data-hour={timeSlot.hour}
+                        data-minute={timeSlot.minute}
+                        onTouchStart={() => handleTouchStart(day, timeSlot.hour, timeSlot.minute)}
+                        onMouseDown={() => handleMouseDown(day, timeSlot.hour, timeSlot.minute)}
+                        onMouseEnter={() => handleMouseEnter(day, timeSlot.hour, timeSlot.minute)}
+                      />
+                    )
+                  })}
+                </div>
+              ))}
+            </div>
+          </div>
+          
+          <div className="mt-3 flex flex-col gap-2">
+            <Button
+              variant="outline"
+              onClick={() => setBusySlots(new Set())}
+              className="border-black text-black hover:bg-gray-50 text-sm py-1.5"
+            >
+              Clear All
+            </Button>
+            
+            <Button
+              onClick={handleSave}
+              className="bg-black text-white hover:bg-gray-800 text-sm py-1.5"
+            >
+              Save Schedule
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+    )
+  }
+
+  // Desktop version
   return (
     <Card>
       <CardHeader>
@@ -228,11 +405,7 @@ export function ScheduleGrid({ sessionId, userName, selectedDays, startTime, end
             {filteredTimeSlots.map((timeSlot) => (
               <div key={timeSlot.value} className="contents">
                 <div className="h-5 flex items-center text-xs text-gray-600 pr-1">
-                  <span className="hidden sm:inline">{timeSlot.label}</span>
-                  <span className="sm:hidden text-xs">
-                    {timeSlot.hour === 0 ? '12' : timeSlot.hour > 12 ? timeSlot.hour - 12 : timeSlot.hour}
-                    {timeSlot.hour < 12 ? 'a' : 'p'}
-                  </span>
+                  <span>{timeSlot.label}</span>
                 </div>
                 {selectedDays.map((day) => {
                   const slotKey = getSlotKey(day, timeSlot.hour, timeSlot.minute)
@@ -242,7 +415,6 @@ export function ScheduleGrid({ sessionId, userName, selectedDays, startTime, end
                   let className = 'h-5 border border-gray-200 cursor-pointer transition-colors '
                   
                   if (isInPreview) {
-                    // Show preview - different state than current
                     const willBeAdded = dragMode === 'add' && !isBusy
                     const willBeRemoved = dragMode === 'remove' && isBusy
                     

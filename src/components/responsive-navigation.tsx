@@ -1,27 +1,43 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Github, Heart, Plus, Calendar } from "lucide-react"
+import { Github, Heart, Plus, Calendar, Menu, X } from "lucide-react"
+import { Button } from "@/components/ui/button"
 
 export function ResponsiveNavigation() {
   const [isCollapsed, setIsCollapsed] = useState(false)
   const [width, setWidth] = useState(256)
   const [isDragging, setIsDragging] = useState(false)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
+  const [mounted, setMounted] = useState(false)
   
-  // Auto-collapse on smaller screens
+  // Determine screen size and responsive behavior
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth < 1024) { // lg breakpoint
+      const windowWidth = window.innerWidth
+      
+      if (windowWidth < 768) { // Mobile phones
+        setIsMobile(true)
+        setIsMobileMenuOpen(false) // Ensure menu is closed on mobile
+      } else if (windowWidth < 1024) { // Tablets
+        setIsMobile(false)
         setIsCollapsed(true)
         setWidth(80) // Collapsed width
-      } else if (window.innerWidth >= 1024 && isCollapsed && width <= 80) {
-        setIsCollapsed(false)
-        setWidth(256) // Expanded width
+        setIsMobileMenuOpen(false) // Close mobile menu when switching to tablet
+      } else { // Desktop
+        setIsMobile(false)
+        setIsMobileMenuOpen(false) // Close mobile menu when switching to desktop
+        if (isCollapsed && width <= 80) {
+          setIsCollapsed(false)
+          setWidth(256) // Expanded width
+        }
       }
     }
     
     // Set initial state
     handleResize()
+    setMounted(true)
     
     window.addEventListener('resize', handleResize)
     return () => window.removeEventListener('resize', handleResize)
@@ -54,6 +70,80 @@ export function ResponsiveNavigation() {
       isTitle: false
     }
   ]
+
+  if (!mounted) {
+    return null // Prevent hydration mismatch
+  }
+
+  if (isMobile) {
+    return (
+      <div>
+        {/* Mobile Header - Fixed and collapsed by default */}
+        <div className="fixed top-0 left-0 right-0 bg-white border-b border-gray-200 z-50 h-12">
+          <div className="flex items-center justify-between px-4 h-full">
+            <div className="flex items-center gap-2">
+              <Calendar className="h-4 w-4 text-gray-700" />
+              <span className="font-semibold text-sm text-gray-900">when2notmeet</span>
+            </div>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="p-1 h-6 w-6"
+            >
+              {isMobileMenuOpen ? <X className="h-3 w-3" /> : <Menu className="h-3 w-3" />}
+            </Button>
+          </div>
+        </div>
+
+
+        {/* Mobile Menu - Dropdown style */}
+        <div 
+          className={`fixed top-12 left-0 right-0 bg-white border-b border-gray-200 z-50 transform transition-transform duration-300 overflow-hidden ${
+            isMobileMenuOpen ? 'translate-y-0' : '-translate-y-full'
+          }`}
+          style={{ 
+            visibility: isMobileMenuOpen ? 'visible' : 'hidden',
+            opacity: isMobileMenuOpen ? 1 : 0
+          }}
+        >
+          <div className="p-3 space-y-2">
+            {sidebarItems.slice(1).map((item, index) => {
+              const Icon = item.icon
+              
+              if (item.external) {
+                return (
+                  <a
+                    key={index}
+                    href={item.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 p-2 rounded-md hover:bg-gray-100 transition-colors text-sm"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    <Icon className="h-4 w-4 flex-shrink-0" />
+                    <span>{item.label}</span>
+                  </a>
+                )
+              }
+              
+              return (
+                <a
+                  key={index}
+                  href={item.href}
+                  className="flex items-center gap-2 p-2 rounded-md hover:bg-gray-100 transition-colors text-sm"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  <Icon className="h-4 w-4 flex-shrink-0" />
+                  <span>{item.label}</span>
+                </a>
+              )
+            })}
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div 
