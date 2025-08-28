@@ -239,14 +239,14 @@ export function SessionView({ sessionId }: SessionViewProps) {
           <Button
             onClick={copyToClipboard}
             variant="outline" 
-            className="border-black text-black hover:bg-gray-50"
+            className="border-black text-black hover:bg-gray-50 cursor-pointer"
           >
             Copy Share Link
           </Button>
           
           <Dialog open={isSignInOpen} onOpenChange={setIsSignInOpen}>
             <DialogTrigger asChild>
-              <Button className="bg-black text-white hover:bg-gray-800">
+              <Button className="bg-black text-white hover:bg-gray-800 cursor-pointer">
                 Join / Edit Schedule
               </Button>
             </DialogTrigger>

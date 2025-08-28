@@ -279,14 +279,14 @@ export function ScheduleGrid({ sessionId, userName, selectedDays, startTime, end
           <Button
             variant="outline"
             onClick={() => setBusySlots(new Set())}
-            className="border-black text-black hover:bg-gray-50"
+            className="border-black text-black hover:bg-gray-50 cursor-pointer"
           >
             Clear All
           </Button>
           
           <Button
             onClick={handleSave}
-            className="bg-black text-white hover:bg-gray-800"
+            className="bg-black text-white hover:bg-gray-800 cursor-pointer"
           >
             Save Schedule
           </Button>

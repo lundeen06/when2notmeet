@@ -32,12 +32,7 @@ export function Sidebar() {
     {
       icon: Heart,
       label: "Donate <3",
-      href: "/donate/eth",
-      // <script
-      //   src="https://cdn.rawgit.com/eth-button/eth-button/09673e85d517452e18a5248b96115bc552a0ac01/dist/eth-button.js"
-      //   data-address="0xd2f4668D0e752e95a8CE01014233458471DDbA4B"
-      //   data-meta="eth-button">
-      // </script>
+      href: "/donate/",
       isTitle: false
     }
   ]
@@ -94,7 +89,7 @@ export function Sidebar() {
                 href={item.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 transition-colors ${
+                className={`flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer ${
                   isCollapsed ? 'justify-center' : ''
                 } ${item.isTitle ? 'font-bold text-lg' : 'text-sm'}`}
               >
@@ -108,7 +103,7 @@ export function Sidebar() {
             <a
               key={index}
               href={item.href}
-              className={`flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 transition-colors ${
+              className={`flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer ${
                 isCollapsed ? 'justify-center' : ''
               } ${item.isTitle ? 'font-bold text-lg' : 'text-sm'}`}
             >

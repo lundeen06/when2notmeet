@@ -120,3 +120,117 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* ETH Button Custom Styling */
+.CustomEtherButton .EthDonateButton {
+  background-color: hsl(var(--card));
+  color: hsl(var(--foreground));
+  border-radius: calc(var(--radius) - 2px);
+  border: 1px solid hsl(var(--border));
+  transition: all 0.2s ease-in-out;
+  width: 100%;
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+}
+
+.CustomEtherButton .EthDonateButton:hover {
+  background-color: hsl(var(--accent));
+  box-shadow: 0 2px 4px 0 rgb(0 0 0 / 0.1);
+}
+
+.CustomEtherButton .EthDonateButton--DisabledOverlay {
+  color: hsl(var(--muted-foreground));
+}
+
+.CustomEtherButton .EthDonateButton--Blockie {
+  display: none;
+}
+
+.CustomEtherButton .EthDonateButton--Content {
+  max-width: 100%;
+  height: auto;
+  min-height: 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 24px;
+  gap: 8px;
+}
+
+.CustomEtherButton .EthDonateButton--LabelRow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+}
+
+.CustomEtherButton .EthDonateButton--LabelRow--Caption {
+  width: 100%;
+  font-weight: 500;
+  font-size: 14px;
+  text-align: center;
+  color: hsl(var(--foreground));
+}
+
+.CustomEtherButton .EthDonateButton--LabelRow--Address {
+  width: 100%;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: hsl(var(--muted-foreground));
+  text-align: center;
+  word-break: break-all;
+}
+
+.CustomEtherButton .EthDonateButton--InputRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  margin: 8px 0;
+}
+
+.CustomEtherButton .EthDonateButton--InputRow--Input {
+  background-color: hsl(var(--background));
+  border: 1px solid hsl(var(--border));
+  border-radius: calc(var(--radius) - 4px);
+  padding: 8px 12px;
+  font-size: 16px;
+  font-weight: 600;
+  text-align: center;
+  color: hsl(var(--foreground));
+  min-width: 80px;
+  max-width: 120px;
+}
+
+.CustomEtherButton .EthDonateButton--InputRow--Input:focus {
+  outline: 2px solid hsl(var(--ring));
+  outline-offset: 2px;
+}
+
+.CustomEtherButton .EthDonateButton--InputRow--Unit {
+  font-size: 16px;
+  font-weight: 600;
+  color: hsl(var(--foreground));
+}
+
+.CustomEtherButton .EthDonateButton--ActionRow {
+  margin-top: 8px;
+}
+
+.CustomEtherButton .EthDonateButton--ActionRow--Button {
+  background-color: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+  border: none;
+  border-radius: calc(var(--radius) - 4px);
+  padding: 8px 24px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.CustomEtherButton .EthDonateButton--ActionRow--Button:hover {
+  background-color: hsl(var(--primary)/0.9);
+}
