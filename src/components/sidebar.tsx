@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button"
 
 export function Sidebar() {
   const [isCollapsed, setIsCollapsed] = useState(false)
+  const [width, setWidth] = useState(256)
+  const [isDragging, setIsDragging] = useState(false)
   
   const sidebarItems = [
     {
@@ -42,31 +44,43 @@ export function Sidebar() {
 
   return (
     <div 
-      className={`bg-white border-r border-gray-200 h-screen transition-all duration-300 flex flex-col ${
-        isCollapsed ? 'w-16' : 'w-64'
+      className={`bg-white border-r border-gray-200 h-screen flex flex-col relative ${
+        isDragging ? '' : 'transition-all duration-300'
       }`}
+      style={{ width }}
     >
       {/* Resize handle */}
       <div 
-        className="absolute right-0 top-0 h-full w-1 cursor-col-resize hover:bg-blue-500 transition-colors"
+        className="absolute right-0 top-0 h-full w-1 cursor-col-resize hover:bg-gray-100 transition-colors z-10 flex items-center justify-center group"
         onMouseDown={(e) => {
+          e.preventDefault()
+          setIsDragging(true)
           const startX = e.clientX
-          const startWidth = isCollapsed ? 64 : 256
+          const startWidth = width
           
           const handleMouseMove = (e: MouseEvent) => {
-            const newWidth = startWidth + (e.clientX - startX)
-            setIsCollapsed(newWidth < 150)
+            e.preventDefault()
+            const newWidth = Math.max(80, Math.min(400, startWidth + (e.clientX - startX)))
+            setWidth(newWidth)
+            setIsCollapsed(newWidth < 210)
           }
           
-          const handleMouseUp = () => {
+          const handleMouseUp = (e: MouseEvent) => {
+            e.preventDefault()
+            setIsDragging(false)
             document.removeEventListener('mousemove', handleMouseMove)
             document.removeEventListener('mouseup', handleMouseUp)
+            document.body.style.cursor = 'default'
+            document.body.style.userSelect = 'auto'
           }
           
+          document.body.style.cursor = 'col-resize'
+          document.body.style.userSelect = 'none'
           document.addEventListener('mousemove', handleMouseMove)
           document.addEventListener('mouseup', handleMouseUp)
         }}
-      />
+      >
+      </div>
       
       {/* Sidebar content */}
       <div className="flex-1 p-4 space-y-2">
