@@ -4,7 +4,7 @@ import { prisma } from '@/lib/prisma'
 export async function PUT(request: NextRequest) {
   try {
     const body = await request.json()
-    const { scheduleId, sessionId, name, eventTitle, selectedDays, busySlots } = body
+    const { scheduleId, sessionId, name, eventTitle, selectedDays, busySlots, startTime, endTime } = body
 
     if (!scheduleId || !sessionId || !name || !selectedDays || !Array.isArray(busySlots)) {
       return NextResponse.json(
@@ -25,6 +25,8 @@ export async function PUT(request: NextRequest) {
         name,
         eventTitle,
         selectedDays: JSON.stringify(selectedDays),
+        startTime: startTime || 16,
+        endTime: endTime || 36,
         busySlots: {
           create: busySlots.map((slot: { day: string; hour: number; minute?: number }) => ({
             day: slot.day,
@@ -51,7 +53,7 @@ export async function PUT(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { sessionId, name, eventTitle, selectedDays, busySlots } = body
+    const { sessionId, name, eventTitle, selectedDays, busySlots, startTime, endTime } = body
 
     if (!sessionId || !name || !selectedDays || !Array.isArray(busySlots)) {
       return NextResponse.json(
@@ -66,6 +68,8 @@ export async function POST(request: NextRequest) {
         name,
         eventTitle,
         selectedDays: JSON.stringify(selectedDays),
+        startTime: startTime || 16,
+        endTime: endTime || 36,
         busySlots: {
           create: busySlots.map((slot: { day: string; hour: number; minute?: number }) => ({
             day: slot.day,

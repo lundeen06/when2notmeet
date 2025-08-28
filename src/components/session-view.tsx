@@ -19,6 +19,9 @@ interface Schedule {
   selectedDays: string[]
   busySlots: BusySlot[]
   createdAt: string
+  startTime?: number
+  endTime?: number
+  eventTitle?: string
 }
 
 interface SessionData {
@@ -64,9 +67,10 @@ export function SessionView({ sessionId }: SessionViewProps) {
   const [isSignInOpen, setIsSignInOpen] = useState(false)
   const router = useRouter()
 
-  // For now, use default time range - can be enhanced later to get from session data
-  const startTime = 16 // 8:00 AM
-  const endTime = 36 // 6:00 PM
+  // Get time range from first schedule, fallback to defaults
+  const firstSchedule = sessionData?.schedules?.[0]
+  const startTime = firstSchedule?.startTime ?? 16 // 8:00 AM
+  const endTime = firstSchedule?.endTime ?? 36 // 6:00 PM
   const filteredTimeSlots = TIME_SLOTS.slice(startTime, endTime + 1)
 
   useEffect(() => {

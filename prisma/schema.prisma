@@ -16,6 +16,8 @@ model Schedule {
   sessionId    String
   eventTitle   String?
   selectedDays String
+  startTime    Int        @default(16)  // 8:00 AM in 30-minute slots (8*2=16)
+  endTime      Int        @default(36)  // 6:00 PM in 30-minute slots (18*2=36)
   createdAt    DateTime   @default(now())
   busySlots    BusySlot[]
 

@@ -92,8 +92,8 @@ export function ScheduleGrid({ sessionId, userName, selectedDays, startTime, end
 
   const getSlotKey = (day: string, hour: number, minute: number) => `${day}-${hour}-${minute}`
 
-  const getDayIndex = (day: string) => selectedDays.indexOf(day)
-  const getTimeIndex = (hour: number, minute: number) => filteredTimeSlots.findIndex(slot => slot.hour === hour && slot.minute === minute)
+  const getDayIndex = useCallback((day: string) => selectedDays.indexOf(day), [selectedDays])
+  const getTimeIndex = useCallback((hour: number, minute: number) => filteredTimeSlots.findIndex(slot => slot.hour === hour && slot.minute === minute), [filteredTimeSlots])
 
   const calculateBoxSelection = useCallback((start: {day: string, hour: number, minute: number}, end: {day: string, hour: number, minute: number}) => {
     const startDayIndex = getDayIndex(start.day)
@@ -117,7 +117,7 @@ export function ScheduleGrid({ sessionId, userName, selectedDays, startTime, end
       }
     }
     return slots
-  }, [selectedDays, filteredTimeSlots])
+  }, [getDayIndex, getTimeIndex])
 
   const handleMouseDown = useCallback((day: string, hour: number, minute: number) => {
     const slotKey = getSlotKey(day, hour, minute)
@@ -195,6 +195,8 @@ export function ScheduleGrid({ sessionId, userName, selectedDays, startTime, end
           eventTitle,
           selectedDays,
           busySlots: busySlotsArray,
+          startTime,
+          endTime,
         }),
       })
 
