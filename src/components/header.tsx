@@ -1,12 +1,13 @@
 import { Github, Heart } from "lucide-react"
+import Link from "next/link"
 
 export function Header() {
   return (
     <header className="bg-white text-black py-4 px-4">
       <div className="container mx-auto flex items-center justify-between">
-        <a href="/" className="text-xl sm:text-2xl font-bold hover:opacity-80 transition-opacity">
+        <Link href="/" className="text-xl sm:text-2xl font-bold hover:opacity-80 transition-opacity">
           when2notmeet
-        </a>
+        </Link>
         
         <div className="flex items-center gap-1">
           <a

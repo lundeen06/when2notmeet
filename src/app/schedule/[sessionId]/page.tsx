@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react'
 export default function SchedulePage() {
   const params = useParams()
   const searchParams = useSearchParams()
-  const [isLoaded, setIsLoaded] = useState(false)
+  const [, setIsLoaded] = useState(false)
   
   const sessionId = params.sessionId as string
   const name = searchParams.get('name') || ''

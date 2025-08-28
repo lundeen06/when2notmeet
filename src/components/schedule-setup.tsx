@@ -72,7 +72,7 @@ export function ScheduleSetup() {
           
           // Get all unique days from existing schedules
           const allDaysSet = new Set<string>()
-          sessionData.schedules.forEach((schedule: any) => {
+          sessionData.schedules.forEach((schedule: { selectedDays: string[] }) => {
             schedule.selectedDays.forEach((day: string) => allDaysSet.add(day))
           })
           const existingDays = Array.from(allDaysSet)
@@ -198,7 +198,7 @@ export function ScheduleSetup() {
                         id={day.id}
                         checked={isSelected}
                         onCheckedChange={() => !isDisabled && handleDayToggle(day.id)}
-                        disabled={isDisabled}
+                        disabled={isDisabled || undefined}
                       />
                       <label
                         htmlFor={day.id}
@@ -229,7 +229,7 @@ export function ScheduleSetup() {
                 <Select
                   value={startTime.toString()}
                   onValueChange={(value) => setStartTime(parseInt(value))}
-                  disabled={joinSessionId && sessionTimeRange !== null}
+                  disabled={!!(joinSessionId && sessionTimeRange)}
                 >
                   <SelectTrigger className="bg-white border-gray-300 text-black">
                     <SelectValue />
@@ -251,7 +251,7 @@ export function ScheduleSetup() {
                 <Select
                   value={endTime.toString()}
                   onValueChange={(value) => setEndTime(parseInt(value))}
-                  disabled={joinSessionId && sessionTimeRange !== null}
+                  disabled={!!(joinSessionId && sessionTimeRange)}
                 >
                   <SelectTrigger className="bg-white border-gray-300 text-black">
                     <SelectValue />

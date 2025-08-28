@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import { Github, Heart, Plus, Calendar } from "lucide-react"
-import { Button } from "@/components/ui/button"
 
 export function Sidebar() {
   const [isCollapsed, setIsCollapsed] = useState(false)

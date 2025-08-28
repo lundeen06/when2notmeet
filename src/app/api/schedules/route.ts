@@ -26,7 +26,7 @@ export async function PUT(request: NextRequest) {
         eventTitle,
         selectedDays: JSON.stringify(selectedDays),
         busySlots: {
-          create: busySlots.map((slot: any) => ({
+          create: busySlots.map((slot: { day: string; hour: number; minute?: number }) => ({
             day: slot.day,
             hour: slot.hour,
             minute: slot.minute || 0,

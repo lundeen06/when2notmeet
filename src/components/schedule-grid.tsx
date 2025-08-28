@@ -72,11 +72,11 @@ export function ScheduleGrid({ sessionId, userName, selectedDays, startTime, end
         try {
           const response = await fetch(`/api/session/${sessionId}`)
           const sessionData = await response.json()
-          const existingSchedule = sessionData.schedules.find((s: any) => s.id === editScheduleId)
+          const existingSchedule = sessionData.schedules.find((s: { id: string }) => s.id === editScheduleId)
           
           if (existingSchedule) {
             const existingSlots = new Set<string>()
-            existingSchedule.busySlots.forEach((slot: any) => {
+            existingSchedule.busySlots.forEach((slot: { day: string; hour: number; minute: number }) => {
               existingSlots.add(getSlotKey(slot.day, slot.hour, slot.minute))
             })
             setBusySlots(existingSlots)
@@ -95,7 +95,7 @@ export function ScheduleGrid({ sessionId, userName, selectedDays, startTime, end
   const getDayIndex = (day: string) => selectedDays.indexOf(day)
   const getTimeIndex = (hour: number, minute: number) => filteredTimeSlots.findIndex(slot => slot.hour === hour && slot.minute === minute)
 
-  const calculateBoxSelection = (start: {day: string, hour: number, minute: number}, end: {day: string, hour: number, minute: number}) => {
+  const calculateBoxSelection = useCallback((start: {day: string, hour: number, minute: number}, end: {day: string, hour: number, minute: number}) => {
     const startDayIndex = getDayIndex(start.day)
     const endDayIndex = getDayIndex(end.day)
     const startTimeIndex = getTimeIndex(start.hour, start.minute)
@@ -117,9 +117,9 @@ export function ScheduleGrid({ sessionId, userName, selectedDays, startTime, end
       }
     }
     return slots
-  }
+  }, [selectedDays, filteredTimeSlots])
 
-  const handleMouseDown = (day: string, hour: number, minute: number) => {
+  const handleMouseDown = useCallback((day: string, hour: number, minute: number) => {
     const slotKey = getSlotKey(day, hour, minute)
     const isCurrentlyBusy = busySlots.has(slotKey)
     
@@ -131,9 +131,9 @@ export function ScheduleGrid({ sessionId, userName, selectedDays, startTime, end
     // Set initial preview
     const initialBox = calculateBoxSelection({ day, hour, minute }, { day, hour, minute })
     setPreviewSlots(initialBox)
-  }
+  }, [busySlots, calculateBoxSelection])
 
-  const handleMouseEnter = (day: string, hour: number, minute: number) => {
+  const handleMouseEnter = useCallback((day: string, hour: number, minute: number) => {
     if (!isDragging || !dragStart) return
     
     setDragEnd({ day, hour, minute })
@@ -141,7 +141,7 @@ export function ScheduleGrid({ sessionId, userName, selectedDays, startTime, end
     // Calculate box selection for preview
     const boxSlots = calculateBoxSelection(dragStart, { day, hour, minute })
     setPreviewSlots(boxSlots)
-  }
+  }, [isDragging, dragStart, calculateBoxSelection])
 
   const handleMouseUp = useCallback(() => {
     if (isDragging && dragStart && dragEnd && previewSlots.size > 0) {
