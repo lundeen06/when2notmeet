@@ -63,7 +63,8 @@ export function ScheduleGrid({ sessionId, userName, selectedDays, startTime, end
     return () => window.removeEventListener('resize', handleResize)
   }, [])
 
-  const filteredTimeSlots = TIME_SLOTS.slice(startTime, endTime + 1)
+  const filteredTimeSlots = TIME_SLOTS.slice(startTime, endTime)
+  const timeLabels = TIME_SLOTS.slice(startTime, endTime + 1)
 
   useEffect(() => {
     // Load existing schedule data if editing
@@ -284,77 +285,89 @@ export function ScheduleGrid({ sessionId, userName, selectedDays, startTime, end
           </div>
         </CardHeader>
         
-        <CardContent className="pt-2">
-          <div className="overflow-x-auto">
-            <div 
-              ref={gridRef}
-              className="grid gap-px select-none mx-auto"
-              style={{
-                gridTemplateColumns: `45px 1fr`,
-                minWidth: '280px',
-                maxWidth: '320px'
-              }}
-              onTouchMove={handleTouchMove}
-            >
-              <div className="h-4"></div>
-              <div className="h-4 flex items-center justify-center font-medium text-black text-sm">
-                {DAY_LABELS[selectedDays[currentMobileDay]]}
+        <CardContent className="pt-2 overflow-visible">
+          <div className="overflow-visible">
+            <div className="flex overflow-visible">
+              {/* Time labels column */}
+              <div className="flex flex-col w-12 mr-1 relative overflow-visible">
+                <div className="h-4"></div>
+                <div className="relative overflow-visible" style={{ height: `${filteredTimeSlots.length * 20}px` }}>
+                  {timeLabels.map((timeLabel, index) => (
+                    <div
+                      key={timeLabel.value}
+                      className="absolute text-xs text-gray-600 -translate-y-1/2 z-20"
+                      style={{ top: `${(index / (timeLabels.length - 1)) * 100}%` }}
+                    >
+                      <span className="text-xs leading-none bg-white px-1">
+                        {timeLabel.hour === 0 ? '12' : timeLabel.hour > 12 ? timeLabel.hour - 12 : timeLabel.hour}
+                        :{timeLabel.minute === 0 ? '00' : '30'}
+                        {timeLabel.hour < 12 ? 'a' : 'p'}
+                      </span>
+                    </div>
+                  ))}
+                </div>
               </div>
               
-              {filteredTimeSlots.map((timeSlot) => (
-                <div key={timeSlot.value} className="contents">
-                  <div className="h-5 flex items-center text-xs text-gray-600 pr-1">
-                    <span className="text-xs">
-                      {timeSlot.hour === 0 ? '12' : timeSlot.hour > 12 ? timeSlot.hour - 12 : timeSlot.hour}
-                      :{timeSlot.minute === 0 ? '00' : '30'}
-                      {timeSlot.hour < 12 ? 'a' : 'p'}
-                    </span>
-                  </div>
-                  {mobileSelectedDays.map((day) => {
-                    const slotKey = getSlotKey(day, timeSlot.hour, timeSlot.minute)
-                    const isBusy = busySlots.has(slotKey)
-                    const isInPreview = previewSlots.has(slotKey) && isDragging
-                    
-                    let className = 'h-5 border border-gray-200 cursor-pointer transition-colors touch-manipulation '
-                    
-                    if (isInPreview) {
-                      const willBeAdded = dragMode === 'add' && !isBusy
-                      const willBeRemoved = dragMode === 'remove' && isBusy
-                      
-                      if (willBeAdded) {
-                        className += 'bg-red-400 border-red-600 border-2' 
-                      } else if (willBeRemoved) {
-                        className += 'bg-gray-300 border-gray-500 border-2'
-                      } else if (isBusy) {
-                        className += 'bg-red-500'
-                      } else {
-                        className += 'bg-white'
-                      }
-                    } else if (isBusy) {
-                      className += 'bg-red-500 active:bg-red-600'
-                    } else {
-                      className += 'bg-white active:bg-gray-100'
-                    }
-                    
-                    return (
-                      <div
-                        key={slotKey}
-                        className={className}
-                        data-day={day}
-                        data-hour={timeSlot.hour}
-                        data-minute={timeSlot.minute}
-                        onTouchStart={() => handleTouchStart(day, timeSlot.hour, timeSlot.minute)}
-                        onMouseDown={() => handleMouseDown(day, timeSlot.hour, timeSlot.minute)}
-                        onMouseEnter={() => handleMouseEnter(day, timeSlot.hour, timeSlot.minute)}
-                      />
-                    )
-                  })}
+              {/* Schedule grid */}
+              <div 
+                ref={gridRef}
+                className="grid gap-px select-none flex-1"
+                style={{
+                  gridTemplateColumns: '1fr',
+                  minWidth: '200px',
+                  maxWidth: '280px'
+                }}
+                onTouchMove={handleTouchMove}
+              >
+                <div className="h-4 flex items-center justify-center font-medium text-black text-sm">
+                  {DAY_LABELS[selectedDays[currentMobileDay]]}
                 </div>
-              ))}
+                
+                {filteredTimeSlots.map((timeSlot) => {
+                  const day = mobileSelectedDays[0]
+                  const slotKey = getSlotKey(day, timeSlot.hour, timeSlot.minute)
+                  const isBusy = busySlots.has(slotKey)
+                  const isInPreview = previewSlots.has(slotKey) && isDragging
+                  
+                  let className = 'h-5 border border-gray-200 cursor-pointer transition-colors touch-manipulation '
+                  
+                  if (isInPreview) {
+                    const willBeAdded = dragMode === 'add' && !isBusy
+                    const willBeRemoved = dragMode === 'remove' && isBusy
+                    
+                    if (willBeAdded) {
+                      className += 'bg-red-400 border-red-600 border-2' 
+                    } else if (willBeRemoved) {
+                      className += 'bg-gray-300 border-gray-500 border-2'
+                    } else if (isBusy) {
+                      className += 'bg-red-500'
+                    } else {
+                      className += 'bg-white'
+                    }
+                  } else if (isBusy) {
+                    className += 'bg-red-500 active:bg-red-600'
+                  } else {
+                    className += 'bg-white active:bg-gray-100'
+                  }
+                  
+                  return (
+                    <div
+                      key={slotKey}
+                      className={className}
+                      data-day={day}
+                      data-hour={timeSlot.hour}
+                      data-minute={timeSlot.minute}
+                      onTouchStart={() => handleTouchStart(day, timeSlot.hour, timeSlot.minute)}
+                      onMouseDown={() => handleMouseDown(day, timeSlot.hour, timeSlot.minute)}
+                      onMouseEnter={() => handleMouseEnter(day, timeSlot.hour, timeSlot.minute)}
+                    />
+                  )
+                })}
+              </div>
             </div>
           </div>
           
-          <div className="mt-3 flex flex-col gap-2">
+          <div className="mt-12 flex flex-col gap-2">
             <Button
               variant="outline"
               onClick={() => setBusySlots(new Set())}
@@ -386,70 +399,85 @@ export function ScheduleGrid({ sessionId, userName, selectedDays, startTime, end
           Click and drag to mark times when you are busy (red = not available)
         </p>
       </CardHeader>
-      <CardContent>
-        <div className="overflow-x-auto">
-          <div 
-            ref={gridRef}
-            className="grid gap-0.5 select-none mx-auto"
-            style={{
-              gridTemplateColumns: `60px repeat(${selectedDays.length}, minmax(80px, 1fr))`,
-              minWidth: selectedDays.length <= 5 ? '300px' : '500px',
-              maxWidth: `${Math.min(1200, 60 + selectedDays.length * 320)}px`
-            }}
-          >
-            <div className="h-6"></div>
-            {selectedDays.map((day) => (
-              <div key={day} className="h-6 flex items-center justify-center font-medium text-black text-xs sm:text-sm">
-                {DAY_LABELS[day]}
+      <CardContent className="overflow-visible pb-12">
+        <div className="overflow-visible">
+          <div className="flex overflow-visible">
+            {/* Time labels column */}
+            <div className="flex flex-col w-16 mr-2 relative overflow-visible">
+              <div className="h-6"></div>
+              <div className="relative overflow-visible" style={{ height: `${filteredTimeSlots.length * 22}px` }}>
+                {timeLabels.map((timeLabel, index) => (
+                  <div
+                    key={timeLabel.value}
+                    className="absolute text-xs text-gray-600 -translate-y-1/2 z-20"
+                    style={{ top: `${(index / (timeLabels.length - 1)) * 100}%` }}
+                  >
+                    <span className="text-xs leading-none bg-white px-1">{timeLabel.label}</span>
+                  </div>
+                ))}
               </div>
-            ))}
+            </div>
             
-            {filteredTimeSlots.map((timeSlot) => (
-              <div key={timeSlot.value} className="contents">
-                <div className="h-5 flex items-center text-xs text-gray-600 pr-1">
-                  <span>{timeSlot.label}</span>
+            {/* Schedule grid */}
+            <div 
+              ref={gridRef}
+              className="grid gap-0.5 select-none flex-1"
+              style={{
+                gridTemplateColumns: `repeat(${selectedDays.length}, minmax(80px, 1fr))`,
+                minWidth: selectedDays.length <= 5 ? '300px' : '500px',
+                maxWidth: `${Math.min(1200, selectedDays.length * 320)}px`
+              }}
+            >
+              {selectedDays.map((day) => (
+                <div key={day} className="h-6 flex items-center justify-center font-medium text-black text-xs sm:text-sm">
+                  {DAY_LABELS[day]}
                 </div>
-                {selectedDays.map((day) => {
-                  const slotKey = getSlotKey(day, timeSlot.hour, timeSlot.minute)
-                  const isBusy = busySlots.has(slotKey)
-                  const isInPreview = previewSlots.has(slotKey) && isDragging
-                  
-                  let className = 'h-5 border border-gray-200 cursor-pointer transition-colors '
-                  
-                  if (isInPreview) {
-                    const willBeAdded = dragMode === 'add' && !isBusy
-                    const willBeRemoved = dragMode === 'remove' && isBusy
+              ))}
+
+              {filteredTimeSlots.map((timeSlot) => (
+                <div key={timeSlot.value} className="contents">
+                  {selectedDays.map((day) => {
+                    const slotKey = getSlotKey(day, timeSlot.hour, timeSlot.minute)
+                    const isBusy = busySlots.has(slotKey)
+                    const isInPreview = previewSlots.has(slotKey) && isDragging
                     
-                    if (willBeAdded) {
-                      className += 'bg-red-400 border-red-600 border-2' 
-                    } else if (willBeRemoved) {
-                      className += 'bg-gray-300 border-gray-500 border-2'
+                    let className = 'h-5 border border-gray-200 cursor-pointer transition-colors '
+                    
+                    if (isInPreview) {
+                      const willBeAdded = dragMode === 'add' && !isBusy
+                      const willBeRemoved = dragMode === 'remove' && isBusy
+                      
+                      if (willBeAdded) {
+                        className += 'bg-red-400 border-red-600 border-2' 
+                      } else if (willBeRemoved) {
+                        className += 'bg-gray-300 border-gray-500 border-2'
+                      } else if (isBusy) {
+                        className += 'bg-red-500'
+                      } else {
+                        className += 'bg-white'
+                      }
                     } else if (isBusy) {
-                      className += 'bg-red-500'
+                      className += 'bg-red-500 hover:bg-red-600'
                     } else {
-                      className += 'bg-white'
+                      className += 'bg-white hover:bg-gray-50'
                     }
-                  } else if (isBusy) {
-                    className += 'bg-red-500 hover:bg-red-600'
-                  } else {
-                    className += 'bg-white hover:bg-gray-50'
-                  }
-                  
-                  return (
-                    <div
-                      key={slotKey}
-                      className={className}
-                      onMouseDown={() => handleMouseDown(day, timeSlot.hour, timeSlot.minute)}
-                      onMouseEnter={() => handleMouseEnter(day, timeSlot.hour, timeSlot.minute)}
-                    />
-                  )
-                })}
-              </div>
-            ))}
+                    
+                    return (
+                      <div
+                        key={slotKey}
+                        className={className}
+                        onMouseDown={() => handleMouseDown(day, timeSlot.hour, timeSlot.minute)}
+                        onMouseEnter={() => handleMouseEnter(day, timeSlot.hour, timeSlot.minute)}
+                      />
+                    )
+                  })}
+                </div>
+              ))}
+            </div>
           </div>
         </div>
         
-        <div className="mt-6 flex flex-col sm:flex-row gap-4 justify-between">
+        <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-between">
           <Button
             variant="outline"
             onClick={() => setBusySlots(new Set())}

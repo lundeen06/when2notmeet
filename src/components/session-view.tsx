@@ -71,7 +71,8 @@ export function SessionView({ sessionId }: SessionViewProps) {
   const firstSchedule = sessionData?.schedules?.[0]
   const startTime = firstSchedule?.startTime ?? 16 // 8:00 AM
   const endTime = firstSchedule?.endTime ?? 36 // 6:00 PM
-  const filteredTimeSlots = TIME_SLOTS.slice(startTime, endTime + 1)
+  const filteredTimeSlots = TIME_SLOTS.slice(startTime, endTime)
+  const timeLabels = TIME_SLOTS.slice(startTime, endTime + 1)
 
   useEffect(() => {
     const fetchSessionData = async () => {
@@ -312,47 +313,58 @@ export function SessionView({ sessionId }: SessionViewProps) {
             </div>
           </div>
         </CardHeader>
-        <CardContent>
-          <div className="overflow-x-auto">
-            <div 
-              className="grid gap-0.5 mx-auto"
-              style={{
-                gridTemplateColumns: `60px repeat(${allDays.length}, minmax(80px, 1fr))`,
-                minWidth: allDays.length <= 5 ? '300px' : '500px',
-                maxWidth: `${Math.min(1200, 60 + allDays.length * 320)}px`
-              }}
-            >
-              <div className="h-6"></div>
-              {allDays.map((day) => (
-                <div key={day} className="h-6 flex items-center justify-center font-medium text-black text-xs sm:text-sm">
-                  {DAY_LABELS[day]}
+        <CardContent className="overflow-visible pb-8">
+          <div className="overflow-visible">
+            <div className="flex overflow-visible">
+              {/* Time labels column */}
+              <div className="flex flex-col w-16 mr-2 relative overflow-visible">
+                <div className="h-6"></div>
+                <div className="relative overflow-visible" style={{ height: `${filteredTimeSlots.length * 22}px` }}>
+                  {timeLabels.map((timeLabel, index) => (
+                    <div
+                      key={timeLabel.value}
+                      className="absolute text-xs text-gray-600 -translate-y-1/2 z-20"
+                      style={{ top: `${(index / (timeLabels.length - 1)) * 100}%` }}
+                    >
+                      <span className="text-xs leading-none bg-white px-1">{timeLabel.label}</span>
+                    </div>
+                  ))}
                 </div>
-              ))}
+              </div>
               
-              {filteredTimeSlots.map((timeSlot) => (
-                <div key={timeSlot.value} className="contents">
-                  <div className="h-5 flex items-center text-xs text-gray-600 pr-1">
-                    <span className="hidden sm:inline">{timeSlot.label}</span>
-                    <span className="sm:hidden text-xs">
-                      {timeSlot.hour === 0 ? '12' : timeSlot.hour > 12 ? timeSlot.hour - 12 : timeSlot.hour}
-                      {timeSlot.hour < 12 ? 'a' : 'p'}
-                    </span>
+              {/* Schedule grid */}
+              <div 
+                className="grid gap-0.5 select-none flex-1"
+                style={{
+                  gridTemplateColumns: `repeat(${allDays.length}, minmax(80px, 1fr))`,
+                  minWidth: allDays.length <= 5 ? '300px' : '500px',
+                  maxWidth: `${Math.min(1200, allDays.length * 320)}px`
+                }}
+              >
+                {allDays.map((day) => (
+                  <div key={day} className="h-6 flex items-center justify-center font-medium text-black text-xs sm:text-sm">
+                    {DAY_LABELS[day]}
                   </div>
-                  {allDays.map((day) => {
-                    const intensity = getOverlapIntensity(day, timeSlot.hour, timeSlot.minute)
-                    const colorClass = getOverlapColor(intensity)
-                    
-                    return (
-                      <div
-                        key={`${day}-${timeSlot.hour}-${timeSlot.minute}`}
-                        className={`h-5 border border-gray-200 ${colorClass} cursor-pointer transition-opacity hover:opacity-80`}
-                        onMouseEnter={() => setHoveredSlot({day, hour: timeSlot.hour, minute: timeSlot.minute})}
-                        onMouseLeave={() => setHoveredSlot(null)}
-                      />
-                    )
-                  })}
-                </div>
-              ))}
+                ))}
+
+                {filteredTimeSlots.map((timeSlot) => (
+                  <div key={timeSlot.value} className="contents">
+                    {allDays.map((day) => {
+                      const intensity = getOverlapIntensity(day, timeSlot.hour, timeSlot.minute)
+                      const colorClass = getOverlapColor(intensity)
+                      
+                      return (
+                        <div
+                          key={`${day}-${timeSlot.hour}-${timeSlot.minute}`}
+                          className={`h-5 border border-gray-200 ${colorClass} cursor-pointer transition-opacity hover:opacity-80`}
+                          onMouseEnter={() => setHoveredSlot({day, hour: timeSlot.hour, minute: timeSlot.minute})}
+                          onMouseLeave={() => setHoveredSlot(null)}
+                        />
+                      )
+                    })}
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </CardContent>
