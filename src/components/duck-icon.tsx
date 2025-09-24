@@ -5,7 +5,7 @@ interface DuckIconProps {
   size?: number
 }
 
-export function DuckIcon({ className = "", size = 24 }: DuckIconProps) {
+export function DuckIcon({ className = "", size = 28 }: DuckIconProps) {
   return (
     <Image
       src="/duck-icon.png"

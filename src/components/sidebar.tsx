@@ -93,7 +93,7 @@ export function Sidebar() {
                   isCollapsed ? 'justify-center' : ''
                 } ${item.isTitle ? 'font-bold text-lg' : 'text-sm'}`}
               >
-                <Icon className={`${item.isTitle ? 'h-6 w-6' : 'h-5 w-5'} flex-shrink-0`} />
+                <Icon className={`${item.isTitle ? 'h-8 w-8' : 'h-5 w-5'} flex-shrink-0`} size={item.isTitle ? 32 : 20} />
                 {!isCollapsed && <span>{item.label}</span>}
               </a>
             )
@@ -107,7 +107,7 @@ export function Sidebar() {
                 isCollapsed ? 'justify-center' : ''
               } ${item.isTitle ? 'font-bold text-lg' : 'text-sm'}`}
             >
-              <Icon className={`${item.isTitle ? 'h-6 w-6' : 'h-5 w-5'} flex-shrink-0`} />
+              <Icon className={`${item.isTitle ? 'h-8 w-8' : 'h-5 w-5'} flex-shrink-0`} size={item.isTitle ? 32 : 20} />
               {!isCollapsed && <span>{item.label}</span>}
             </a>
           )
