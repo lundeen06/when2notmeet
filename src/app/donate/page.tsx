@@ -27,7 +27,7 @@ export default function DonatePage() {
         <div className="text-center mb-6">
           <h1 className="text-2xl font-semibold text-foreground mb-2">Support when2notmeet</h1>
           <p className="text-sm text-muted-foreground">
-            Help keep this tool free and running
+            If you consider this website useful, I would like your money. <br></br> Please.
           </p>
         </div>
         

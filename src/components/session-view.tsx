@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
+import { Dialog, DialogContent, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { useRouter } from 'next/navigation'
 
 interface BusySlot {
@@ -262,11 +262,19 @@ export function SessionView({ sessionId }: SessionViewProps) {
                 Join / Edit Schedule
               </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-md">
-              <DialogHeader>
-                <DialogTitle>Join / Edit Schedule</DialogTitle>
-              </DialogHeader>
-              <div className="space-y-4 pt-4">
+            <DialogContent className="sm:max-w-md" showCloseButton={false}>
+              <div className="flex justify-between items-center mb-2">
+                <DialogTitle className="text-lg font-semibold">Join / Edit Schedule</DialogTitle>
+                <button
+                  onClick={() => setIsSignInOpen(false)}
+                  className="opacity-70 hover:opacity-100 transition-opacity"
+                >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M18 6L6 18M6 6l12 12"/>
+                  </svg>
+                </button>
+              </div>
+              <div className="space-y-4">
                 <div>
                   <label htmlFor="signin-name" className="block text-sm font-medium text-primary mb-2">
                     Your Name
