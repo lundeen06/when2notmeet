@@ -245,7 +245,7 @@ export function ScheduleGrid({ sessionId, userName, selectedDays, startTime, end
     return (
       <Card>
         <CardHeader className="pb-2">
-          <CardTitle className="text-base text-black">
+          <CardTitle className="text-base text-primary">
             Select Your Unavailable Times
           </CardTitle>
           <p className="text-xs text-gray-600">
@@ -265,7 +265,7 @@ export function ScheduleGrid({ sessionId, userName, selectedDays, startTime, end
             </Button>
             
             <div className="text-center">
-              <div className="font-medium text-black text-sm">
+              <div className="font-medium text-primary text-sm">
                 {DAY_LABELS[selectedDays[currentMobileDay]]}
               </div>
               <div className="text-xs text-gray-500">
@@ -319,7 +319,7 @@ export function ScheduleGrid({ sessionId, userName, selectedDays, startTime, end
                 }}
                 onTouchMove={handleTouchMove}
               >
-                <div className="h-4 flex items-center justify-center font-medium text-black text-sm">
+                <div className="h-4 flex items-center justify-center font-medium text-primary text-sm">
                   {DAY_LABELS[selectedDays[currentMobileDay]]}
                 </div>
                 
@@ -371,14 +371,14 @@ export function ScheduleGrid({ sessionId, userName, selectedDays, startTime, end
             <Button
               variant="outline"
               onClick={() => setBusySlots(new Set())}
-              className="border-black text-black hover:bg-gray-50 text-sm py-1.5"
+              className="border-primary text-primary hover:bg-gray-50 text-sm py-1.5"
             >
               Clear All
             </Button>
             
             <Button
               onClick={handleSave}
-              className="bg-black text-white hover:bg-gray-800 text-sm py-1.5"
+              className="bg-primary text-primary-foreground hover:bg-primary/90 text-sm py-1.5"
             >
               Save Schedule
             </Button>
@@ -392,7 +392,7 @@ export function ScheduleGrid({ sessionId, userName, selectedDays, startTime, end
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-xl text-black">
+        <CardTitle className="text-xl text-primary">
           Select Your Unavailable Times
         </CardTitle>
         <p className="text-sm text-gray-600">
@@ -429,7 +429,7 @@ export function ScheduleGrid({ sessionId, userName, selectedDays, startTime, end
               }}
             >
               {selectedDays.map((day) => (
-                <div key={day} className="h-6 flex items-center justify-center font-medium text-black text-xs sm:text-sm">
+                <div key={day} className="h-6 flex items-center justify-center font-medium text-primary text-xs sm:text-sm">
                   {DAY_LABELS[day]}
                 </div>
               ))}
@@ -481,14 +481,14 @@ export function ScheduleGrid({ sessionId, userName, selectedDays, startTime, end
           <Button
             variant="outline"
             onClick={() => setBusySlots(new Set())}
-            className="border-black text-black hover:bg-gray-50 cursor-pointer"
+            className="border-primary text-primary hover:bg-gray-50 cursor-pointer"
           >
             Clear All
           </Button>
           
           <Button
             onClick={handleSave}
-            className="bg-black text-white hover:bg-gray-800 cursor-pointer"
+            className="bg-primary text-primary-foreground hover:bg-primary/90 cursor-pointer"
           >
             Save Schedule
           </Button>

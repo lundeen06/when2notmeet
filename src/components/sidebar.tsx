@@ -1,7 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import { Github, Heart, Plus, Calendar } from "lucide-react"
+import { Github, Heart, Plus } from "lucide-react"
+import { DuckIcon } from "@/components/duck-icon"
 
 export function Sidebar() {
   const [isCollapsed, setIsCollapsed] = useState(false)
@@ -10,7 +11,7 @@ export function Sidebar() {
   
   const sidebarItems = [
     {
-      icon: Calendar,
+      icon: DuckIcon,
       label: "when2notmeet",
       href: "/",
       isTitle: true
@@ -37,7 +38,7 @@ export function Sidebar() {
   ]
 
   return (
-    <div 
+    <div
       className={`bg-white border-r border-gray-200 h-screen flex flex-col relative ${
         isDragging ? '' : 'transition-all duration-300'
       }`}
@@ -88,7 +89,7 @@ export function Sidebar() {
                 href={item.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer ${
+                className={`flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer text-primary ${
                   isCollapsed ? 'justify-center' : ''
                 } ${item.isTitle ? 'font-bold text-lg' : 'text-sm'}`}
               >
@@ -102,7 +103,7 @@ export function Sidebar() {
             <a
               key={index}
               href={item.href}
-              className={`flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer ${
+              className={`flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer text-primary ${
                 isCollapsed ? 'justify-center' : ''
               } ${item.isTitle ? 'font-bold text-lg' : 'text-sm'}`}
             >

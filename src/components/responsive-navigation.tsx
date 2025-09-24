@@ -1,8 +1,9 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Github, Heart, Plus, Calendar, Menu, X } from "lucide-react"
+import { Github, Heart, Plus, Menu, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { DuckIcon } from "@/components/duck-icon"
 
 export function ResponsiveNavigation() {
   const [isCollapsed, setIsCollapsed] = useState(false)
@@ -45,7 +46,7 @@ export function ResponsiveNavigation() {
   
   const sidebarItems = [
     {
-      icon: Calendar,
+      icon: DuckIcon,
       label: "when2notmeet",
       href: "/",
       isTitle: true
@@ -82,8 +83,8 @@ export function ResponsiveNavigation() {
         <div className="fixed top-0 left-0 right-0 bg-white border-b border-gray-200 z-50 h-12">
           <div className="flex items-center justify-between px-4 h-full">
             <div className="flex items-center gap-2">
-              <Calendar className="h-4 w-4 text-gray-700" />
-              <span className="font-semibold text-sm text-gray-900">when2notmeet</span>
+              <DuckIcon size={16} className="flex-shrink-0" />
+              <span className="font-semibold text-sm" style={{ color: 'hsl(var(--primary))' }}>when2notmeet</span>
             </div>
             <Button
               variant="ghost"
@@ -119,6 +120,7 @@ export function ResponsiveNavigation() {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center gap-2 p-2 rounded-md hover:bg-gray-100 transition-colors text-sm"
+                    style={{ color: 'hsl(var(--foreground))' }}
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     <Icon className="h-4 w-4 flex-shrink-0" />
@@ -132,6 +134,7 @@ export function ResponsiveNavigation() {
                   key={index}
                   href={item.href}
                   className="flex items-center gap-2 p-2 rounded-md hover:bg-gray-100 transition-colors text-sm"
+                  style={{ color: 'hsl(var(--foreground))' }}
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   <Icon className="h-4 w-4 flex-shrink-0" />
@@ -146,7 +149,7 @@ export function ResponsiveNavigation() {
   }
 
   return (
-    <div 
+    <div
       className={`bg-white border-r border-gray-200 h-screen flex flex-col relative ${
         isDragging ? '' : 'transition-all duration-300'
       }`}
@@ -200,6 +203,7 @@ export function ResponsiveNavigation() {
                 className={`flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer ${
                   isCollapsed ? 'justify-center' : ''
                 } ${item.isTitle ? 'font-bold text-lg' : 'text-sm'}`}
+                style={{ color: item.isTitle ? 'hsl(var(--primary))' : 'hsl(var(--foreground))' }}
               >
                 <Icon className={`${item.isTitle ? 'h-6 w-6' : 'h-5 w-5'} flex-shrink-0`} />
                 {!isCollapsed && <span>{item.label}</span>}
@@ -214,6 +218,7 @@ export function ResponsiveNavigation() {
               className={`flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer ${
                 isCollapsed ? 'justify-center' : ''
               } ${item.isTitle ? 'font-bold text-lg' : 'text-sm'}`}
+              style={{ color: item.isTitle ? 'hsl(var(--primary))' : 'hsl(var(--foreground))' }}
             >
               <Icon className={`${item.isTitle ? 'h-6 w-6' : 'h-5 w-5'} flex-shrink-0`} />
               {!isCollapsed && <span>{item.label}</span>}

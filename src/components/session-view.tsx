@@ -213,7 +213,7 @@ export function SessionView({ sessionId }: SessionViewProps) {
       <div className="flex items-center justify-center min-h-[400px]">
         <div className="text-center">
           <div className="text-lg text-gray-600 mb-4">No schedules found for this session</div>
-          <Button onClick={joinSchedule} className="bg-black text-white hover:bg-gray-800">
+          <Button onClick={joinSchedule} className="bg-primary text-primary-foreground hover:bg-primary/90">
             Join This Schedule
           </Button>
         </div>
@@ -227,13 +227,13 @@ export function SessionView({ sessionId }: SessionViewProps) {
     <div className="space-y-6">
       {eventTitle && (
         <div className="text-center pt-6">
-          <h2 className="text-2xl font-bold text-black mb-2">{eventTitle}</h2>
+          <h2 className="text-2xl font-bold text-primary mb-2">{eventTitle}</h2>
         </div>
       )}
       
       <div className="flex flex-col sm:flex-row gap-4 items-center justify-between">
         <div>
-          <h3 className="text-xl font-bold text-black">
+          <h3 className="text-xl font-bold text-primary">
             {sessionData.schedules.length} Participant{sessionData.schedules.length !== 1 ? 's' : ''}
           </h3>
           <div className="text-sm text-gray-600 mt-1">
@@ -244,14 +244,14 @@ export function SessionView({ sessionId }: SessionViewProps) {
           <Button
             onClick={copyToClipboard}
             variant="outline" 
-            className="border-black text-black hover:bg-gray-50 cursor-pointer"
+            className="border-primary text-primary hover:bg-gray-50 cursor-pointer"
           >
             Copy Share Link
           </Button>
           
           <Dialog open={isSignInOpen} onOpenChange={setIsSignInOpen}>
             <DialogTrigger asChild>
-              <Button className="bg-black text-white hover:bg-gray-800 cursor-pointer">
+              <Button className="bg-primary text-primary-foreground hover:bg-primary/90 cursor-pointer">
                 Join / Edit Schedule
               </Button>
             </DialogTrigger>
@@ -261,7 +261,7 @@ export function SessionView({ sessionId }: SessionViewProps) {
               </DialogHeader>
               <div className="space-y-4 pt-4">
                 <div>
-                  <label htmlFor="signin-name" className="block text-sm font-medium text-black mb-2">
+                  <label htmlFor="signin-name" className="block text-sm font-medium text-primary mb-2">
                     Your Name
                   </label>
                   <Input
@@ -270,7 +270,7 @@ export function SessionView({ sessionId }: SessionViewProps) {
                     value={signInName}
                     onChange={(e) => setSignInName(e.target.value)}
                     placeholder="Enter your name"
-                    className="bg-white border-gray-300 text-black"
+                    className="bg-white border-gray-300 text-primary"
                     onKeyDown={(e) => e.key === 'Enter' && handleSignIn()}
                   />
                 </div>
@@ -284,7 +284,7 @@ export function SessionView({ sessionId }: SessionViewProps) {
                   <Button
                     onClick={handleSignIn}
                     disabled={!signInName.trim()}
-                    className="bg-black text-white hover:bg-gray-800"
+                    className="bg-primary text-primary-foreground hover:bg-primary/90"
                   >
                     Continue
                   </Button>
@@ -297,7 +297,7 @@ export function SessionView({ sessionId }: SessionViewProps) {
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-xl text-black">Group Availability  t(-_-t)</CardTitle>
+          <CardTitle className="text-xl text-primary">Group Availability  t(-_-t)</CardTitle>
           <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-xs sm:text-sm text-gray-600">
             <div className="flex items-center gap-2">
               <div className="w-4 h-4 bg-green-500"></div>
@@ -342,7 +342,7 @@ export function SessionView({ sessionId }: SessionViewProps) {
                 }}
               >
                 {allDays.map((day) => (
-                  <div key={day} className="h-6 flex items-center justify-center font-medium text-black text-xs sm:text-sm">
+                  <div key={day} className="h-6 flex items-center justify-center font-medium text-primary text-xs sm:text-sm">
                     {DAY_LABELS[day]}
                   </div>
                 ))}
@@ -374,7 +374,7 @@ export function SessionView({ sessionId }: SessionViewProps) {
         <Card className="mt-2 bg-gray-50 py-2">
           <CardContent className="pt-2 pb-2">
             <div className="text-sm">
-              <div className="font-medium text-black mb-2">
+              <div className="font-medium text-primary mb-2">
                 {DAY_LABELS[hoveredSlot.day]} at {
                   (() => {
                     const displayHour = hoveredSlot.hour === 0 ? 12 : hoveredSlot.hour > 12 ? hoveredSlot.hour - 12 : hoveredSlot.hour

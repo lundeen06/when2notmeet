@@ -125,8 +125,8 @@ export function ScheduleSetup() {
   return (
     <Card className="py-2">
       <CardHeader>
-        <CardTitle className="text-xl text-black pt-4">
-          {joinSessionId ? 'Join Schedule' : 'Create Your Event  (☞ﾟ∀ﾟ)☞'}
+        <CardTitle className="text-xl text-primary pt-4">
+          {joinSessionId ? 'Join Schedule' : 'Create Your Event'} 
         </CardTitle>
         {joinSessionId && (
           <p className="text-sm text-gray-600">
@@ -143,7 +143,7 @@ export function ScheduleSetup() {
         <form onSubmit={handleSubmit} className="space-y-6">
           {!joinSessionId && (
             <div>
-              <label htmlFor="eventTitle" className="block text-sm font-medium text-black mb-2">
+              <label htmlFor="eventTitle" className="block text-sm font-medium text-primary mb-2">
                 Event Title
               </label>
               <Input
@@ -152,7 +152,7 @@ export function ScheduleSetup() {
                 value={eventTitle}
                 onChange={(e) => setEventTitle(e.target.value)}
                 placeholder="e.g., Weekly Team Meeting, Birthday Party Planning"
-                className="bg-white border-gray-300 text-black"
+                className="bg-white border-gray-300 text-primary"
                 required
               />
             </div>
@@ -160,17 +160,17 @@ export function ScheduleSetup() {
           
           {joinSessionId && sessionEventTitle && (
             <div>
-              <label className="block text-sm font-medium text-black mb-2">
+              <label className="block text-sm font-medium text-primary mb-2">
                 Event
               </label>
               <div className="p-3 bg-gray-50 border border-gray-300 rounded-md">
-                <span className="text-black font-medium">{sessionEventTitle}</span>
+                <span className="text-primary font-medium">{sessionEventTitle}</span>
               </div>
             </div>
           )}
 
           <div>
-            <label htmlFor="name" className="block text-sm font-medium text-black mb-2">
+            <label htmlFor="name" className="block text-sm font-medium text-primary mb-2">
               Your Name
             </label>
             <Input
@@ -179,12 +179,12 @@ export function ScheduleSetup() {
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Enter your name"
-              className="bg-white border-gray-300 text-black"
+              className="bg-white border-gray-300" style={{ color: 'hsl(var(--foreground))' }}
               required
             />
           </div>
             <div>
-              <label className="block text-sm font-medium text-black mb-3">
+              <label className="block text-sm font-medium mb-3" style={{ color: 'hsl(var(--foreground))' }}>
                 {joinSessionId && sessionDays ? 'Session Days' : 'Select Days'}
               </label>
               <div className="space-y-2">
@@ -206,7 +206,7 @@ export function ScheduleSetup() {
                           isDisabled 
                             ? 'cursor-not-allowed opacity-70' 
                             : 'peer-disabled:cursor-not-allowed peer-disabled:opacity-70'
-                        } text-black`}
+                        } text-primary`}
                       >
                         {day.label}
                       </label>
@@ -223,7 +223,7 @@ export function ScheduleSetup() {
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-black mb-2">
+                <label className="block text-sm font-medium text-primary mb-2">
                   Start Time
                 </label>
                 <Select
@@ -231,7 +231,7 @@ export function ScheduleSetup() {
                   onValueChange={(value) => setStartTime(parseInt(value))}
                   disabled={!!(joinSessionId && sessionTimeRange)}
                 >
-                  <SelectTrigger className="bg-white border-gray-300 text-black">
+                  <SelectTrigger className="bg-white border-gray-300 text-primary">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -245,7 +245,7 @@ export function ScheduleSetup() {
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-black mb-2">
+                <label className="block text-sm font-medium text-primary mb-2">
                   End Time
                 </label>
                 <Select
@@ -253,7 +253,7 @@ export function ScheduleSetup() {
                   onValueChange={(value) => setEndTime(parseInt(value))}
                   disabled={!!(joinSessionId && sessionTimeRange)}
                 >
-                  <SelectTrigger className="bg-white border-gray-300 text-black">
+                  <SelectTrigger className="bg-white border-gray-300 text-primary">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -277,7 +277,7 @@ export function ScheduleSetup() {
             type="submit"
             disabled={false}
             // disabled={!name.trim() || selectedDays.length === 0 || (!eventTitle.trim() && !joinSessionId)}
-            className="w-full bg-black text-white hover:bg-gray-800"
+            className="w-full bg-primary text-primary-foreground hover:bg-primary/90"
           >
             Create Event
           </Button>

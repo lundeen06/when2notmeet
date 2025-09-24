@@ -35,40 +35,23 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         suppressHydrationWarning={true}
       >
-          <div className="ascii-background">
-            <div className="ascii-float">{`╭───╮\n│ ◕ ◕ │\n│  ω  │\n╰───╯`}</div>
-            <div className="ascii-float">{`∩─∩\n● ●\n ∀`}</div>
-            <div className="ascii-float">{`┌───┐\n│ ◉ ◉ │\n│  ─  │\n└───┘`}</div>
-            <div className="ascii-float">{`╭─╮\n◐ ◑\n ◡\n╰─╯`}</div>
-            <div className="ascii-float">{`◢◤\n◥◣\n● ●\n ▼`}</div>
-            <div className="ascii-float">{`╔═╗\n║◕◕║\n║ ∇ ║\n╚═╝`}</div>
-            <div className="ascii-float">{`∩───∩\n│ ◕ ◕ │\n│  ω  │\n∪───∪`}</div>
-            <div className="ascii-float">{`┏━━┓\n┃ ◉ ◉ ┃\n┃ ╲╱ ┃\n┗━━┛`}</div>
-            <div className="ascii-float">{`( ◕ ◕ )\n  ~~~`}</div>
-            <div className="ascii-float">{`○ ○\n ▽`}</div>
-            <div className="ascii-float">{`╭─╮\n│●●│\n│ o│\n╰─╯`}</div>
-            <div className="ascii-float">{`◐ ◑\n ◡`}</div>
-            <div className="ascii-float">{`[◕◕]\n ─`}</div>
-            <div className="ascii-float">{`⌐◕◕\n  ∪`}</div>
-            <div className="ascii-float">{`◉ ◉\n ▼`}</div>
-            <div className="ascii-float">{`● ●\n ω`}</div>
-            <div className="ascii-float">{`╰◕╯\n ‿`}</div>
-            <div className="ascii-float">{`◕ ◔\n ◡`}</div>
-            <div className="ascii-float">{`⊙ ⊙\n  ⌒`}</div>
-            <div className="ascii-float">{`◉ ○\n ∪`}</div>
-            <div className="ascii-float">{`● ◕\n  ‿`}</div>
-            <div className="ascii-float">{`◐ ◑\n ▽`}</div>
-            <div className="ascii-float">{`◕ ◉\n ω`}</div>
-            <div className="ascii-float">{`○ ●\n ◡`}</div>
-            <div className="ascii-float">{`⊕ ⊖\n ─`}</div>
-            <div className="ascii-float">{`◯ ◉\n ∇`}</div>
-            <div className="ascii-float">{`◔ ◕\n ∀`}</div>
-            <div className="ascii-float">{`● ○\n ▼`}</div>
-            <div className="ascii-float">{`◉ ◐\n ⌒`}</div>
-            <div className="ascii-float">{`◑ ◒\n ‿`}</div>
-            <div className="ascii-float">{`⊙ ◯\n ∪`}</div>
-            <div className="ascii-float">{`◔ ●\n ◡`}</div>
-            <div className="ascii-float">{`○ ◉\n ω`}</div>
+          <div className="duck-background">
+            <div className="duck-float"><img src="/duck-icon.png" alt="" className="pixelated" /></div>
+            <div className="duck-float"><img src="/duck-icon.png" alt="" className="pixelated" /></div>
+            <div className="duck-float"><img src="/duck-icon.png" alt="" className="pixelated" /></div>
+            <div className="duck-float"><img src="/duck-icon.png" alt="" className="pixelated" /></div>
+            <div className="duck-float"><img src="/duck-icon.png" alt="" className="pixelated" /></div>
+            <div className="duck-float"><img src="/duck-icon.png" alt="" className="pixelated" /></div>
+            <div className="duck-float"><img src="/duck-icon.png" alt="" className="pixelated" /></div>
+            <div className="duck-float"><img src="/duck-icon.png" alt="" className="pixelated" /></div>
+            <div className="duck-float"><img src="/duck-icon.png" alt="" className="pixelated" /></div>
+            <div className="duck-float"><img src="/duck-icon.png" alt="" className="pixelated" /></div>
+            <div className="duck-float"><img src="/duck-icon.png" alt="" className="pixelated" /></div>
+            <div className="duck-float"><img src="/duck-icon.png" alt="" className="pixelated" /></div>
+            <div className="duck-float"><img src="/duck-icon.png" alt="" className="pixelated" /></div>
+            <div className="duck-float"><img src="/duck-icon.png" alt="" className="pixelated" /></div>
+            <div className="duck-float"><img src="/duck-icon.png" alt="" className="pixelated" /></div>
+            <div className="duck-float"><img src="/duck-icon.png" alt="" className="pixelated" /></div>
           </div>
           <div className="md:flex h-screen">
             <ResponsiveNavigation />

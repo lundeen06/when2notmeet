@@ -46,18 +46,18 @@
 :root {
   --radius: 0.625rem;
   --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
+  --foreground: #1a1a2e;
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
+  --primary: #1b013d;
   --primary-foreground: oklch(0.985 0 0);
   --secondary: oklch(0.97 0 0);
   --secondary-foreground: oklch(0.205 0 0);
   --muted: oklch(0.97 0 0);
   --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
+  --accent: oklch(0.9 0.1 60);
   --accent-foreground: oklch(0.205 0 0);
   --destructive: oklch(0.577 0.245 27.325);
   --border: oklch(0.922 0 0);
@@ -68,11 +68,11 @@
   --chart-3: oklch(0.398 0.07 227.392);
   --chart-4: oklch(0.828 0.189 84.429);
   --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.985 0 0);
+  --sidebar: oklch(0.98 0.02 60);
   --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary: oklch(0.5 0.15 260);
   --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent: oklch(0.95 0.05 60);
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
@@ -235,49 +235,49 @@
   background-color: hsl(var(--primary)/0.9);
 }
 
-/* Floating ASCII Art Background */
+/* Floating Duck Background */
 @keyframes float-left {
   0% { transform: translateX(100vw) translateY(0px) rotate(0deg); }
-  100% { transform: translateX(-200px) translateY(-100vh) rotate(360deg); }
+  100% { transform: translateX(256px) translateY(calc(100vh - 80px)) rotate(360deg); }
 }
 
 @keyframes float-right {
-  0% { transform: translateX(-200px) translateY(100vh) rotate(0deg); }
+  0% { transform: translateX(256px) translateY(calc(100vh - 80px)) rotate(0deg); }
   100% { transform: translateX(100vw) translateY(0px) rotate(-360deg); }
 }
 
 @keyframes float-diagonal {
-  0% { transform: translateX(-100px) translateY(100vh) rotate(0deg); }
-  100% { transform: translateX(100vw) translateY(-100px) rotate(180deg); }
+  0% { transform: translateX(256px) translateY(calc(100vh - 80px)) rotate(0deg); }
+  100% { transform: translateX(100vw) translateY(0px) rotate(180deg); }
 }
 
 @keyframes float-up {
-  0% { transform: translateX(20vw) translateY(110vh) rotate(0deg); }
-  100% { transform: translateX(80vw) translateY(-10vh) rotate(180deg); }
+  0% { transform: translateX(calc(256px + 20vw)) translateY(calc(100vh - 60px)) rotate(0deg); }
+  100% { transform: translateX(80vw) translateY(20px) rotate(180deg); }
 }
 
 @keyframes float-down {
-  0% { transform: translateX(70vw) translateY(-10vh) rotate(0deg); }
-  100% { transform: translateX(30vw) translateY(110vh) rotate(-180deg); }
+  0% { transform: translateX(70vw) translateY(20px) rotate(0deg); }
+  100% { transform: translateX(calc(256px + 10vw)) translateY(calc(100vh - 60px)) rotate(-180deg); }
 }
 
 @keyframes float-zigzag {
-  0% { transform: translateX(-10vw) translateY(50vh) rotate(0deg); }
-  25% { transform: translateX(30vw) translateY(20vh) rotate(90deg); }
-  50% { transform: translateX(70vw) translateY(80vh) rotate(180deg); }
+  0% { transform: translateX(256px) translateY(50vh) rotate(0deg); }
+  25% { transform: translateX(calc(256px + 20vw)) translateY(20vh) rotate(90deg); }
+  50% { transform: translateX(70vw) translateY(70vh) rotate(180deg); }
   75% { transform: translateX(50vw) translateY(30vh) rotate(270deg); }
-  100% { transform: translateX(110vw) translateY(60vh) rotate(360deg); }
+  100% { transform: translateX(100vw) translateY(60vh) rotate(360deg); }
 }
 
 @keyframes float-circle {
-  0% { transform: translateX(50vw) translateY(50vh) rotate(0deg); }
-  25% { transform: translateX(70vw) translateY(30vh) rotate(90deg); }
-  50% { transform: translateX(50vw) translateY(20vh) rotate(180deg); }
-  75% { transform: translateX(30vw) translateY(30vh) rotate(270deg); }
-  100% { transform: translateX(50vw) translateY(50vh) rotate(360deg); }
+  0% { transform: translateX(60vw) translateY(50vh) rotate(0deg); }
+  25% { transform: translateX(80vw) translateY(30vh) rotate(90deg); }
+  50% { transform: translateX(60vw) translateY(20vh) rotate(180deg); }
+  75% { transform: translateX(calc(256px + 15vw)) translateY(30vh) rotate(270deg); }
+  100% { transform: translateX(60vw) translateY(50vh) rotate(360deg); }
 }
 
-.ascii-background {
+.duck-background {
   position: fixed;
   top: 0;
   left: 0;
@@ -288,24 +288,29 @@
   overflow: hidden;
 }
 
-.ascii-float {
+.duck-float {
   position: absolute;
-  font-family: var(--font-mono), monospace;
-  font-weight: bold;
-  white-space: pre;
-  color: hsl(var(--muted-foreground));
+  width: 32px;
+  height: 32px;
   user-select: none;
   will-change: transform;
+  opacity: 0.08;
 }
 
-/* Block ASCII from sidebar and footer */
+.duck-float img {
+  width: 100%;
+  height: 100%;
+  filter: blur(0.8px);
+}
+
+/* Block ducks from sidebar and footer */
 nav, aside, [role="navigation"], footer, [class*="sidebar"], [class*="Sidebar"] {
   position: relative;
   z-index: 10;
   background: hsl(var(--background));
 }
 
-/* Ensure footer specifically blocks ASCII completely */
+/* Ensure footer specifically blocks ducks completely */
 footer {
   z-index: 10 !important;
   background: white !important;
@@ -315,276 +320,148 @@ footer {
   background: hsl(var(--background)) !important;
 }
 
-/* Make cards and buttons appear above ASCII in main content */
+/* Make cards and buttons appear above ducks in main content */
 [class*="card"], [class*="Card"], .card, button, [role="button"], input, textarea, select {
   position: relative;
   z-index: 1;
 }
 
-.ascii-float:nth-child(1) {
-  font-size: 0.8rem;
-  opacity: 0.12;
+.duck-float:nth-child(1) {
+  width: 28px;
+  height: 28px;
   animation: float-left 18s linear infinite;
   animation-delay: 0s;
-  filter: blur(0.5px);
 }
 
-.ascii-float:nth-child(2) {
-  font-size: 0.6rem;
-  opacity: 0.08;
+.duck-float:nth-child(2) {
+  width: 20px;
+  height: 20px;
   animation: float-right 22s linear infinite;
   animation-delay: -3s;
-  filter: blur(1px);
 }
 
-.ascii-float:nth-child(3) {
-  font-size: 1rem;
-  opacity: 0.1;
+.duck-float:nth-child(3) {
+  width: 36px;
+  height: 36px;
   animation: float-diagonal 25s linear infinite;
   animation-delay: -6s;
-  filter: blur(0.3px);
 }
 
-.ascii-float:nth-child(4) {
-  font-size: 0.7rem;
-  opacity: 0.06;
+.duck-float:nth-child(4) {
+  width: 24px;
+  height: 24px;
   animation: float-up 20s linear infinite;
   animation-delay: -9s;
-  filter: blur(1.5px);
 }
 
-.ascii-float:nth-child(5) {
-  font-size: 0.9rem;
-  opacity: 0.09;
+.duck-float:nth-child(5) {
+  width: 32px;
+  height: 32px;
   animation: float-down 24s linear infinite;
   animation-delay: -12s;
-  filter: blur(0.8px);
 }
 
-.ascii-float:nth-child(6) {
-  font-size: 0.5rem;
-  opacity: 0.05;
+.duck-float:nth-child(6) {
+  width: 18px;
+  height: 18px;
   animation: float-zigzag 30s linear infinite;
   animation-delay: -15s;
-  filter: blur(2px);
 }
 
-.ascii-float:nth-child(7) {
-  font-size: 1.1rem;
-  opacity: 0.11;
+.duck-float:nth-child(7) {
+  width: 40px;
+  height: 40px;
   animation: float-circle 26s linear infinite;
   animation-delay: -4s;
-  filter: blur(0.4px);
 }
 
-.ascii-float:nth-child(8) {
-  font-size: 0.6rem;
-  opacity: 0.07;
+.duck-float:nth-child(8) {
+  width: 22px;
+  height: 22px;
   animation: float-left 19s linear infinite;
   animation-delay: -11s;
-  filter: blur(1.2px);
 }
 
-.ascii-float:nth-child(9) {
-  font-size: 0.8rem;
-  opacity: 0.08;
+.duck-float:nth-child(9) {
+  width: 30px;
+  height: 30px;
   animation: float-right 27s linear infinite;
   animation-delay: -7s;
-  filter: blur(0.9px);
 }
 
-.ascii-float:nth-child(10) {
-  font-size: 0.7rem;
-  opacity: 0.06;
+.duck-float:nth-child(10) {
+  width: 26px;
+  height: 26px;
   animation: float-diagonal 21s linear infinite;
   animation-delay: -14s;
-  filter: blur(1.3px);
 }
 
-.ascii-float:nth-child(11) {
-  font-size: 0.9rem;
-  opacity: 0.09;
+.duck-float:nth-child(11) {
+  width: 34px;
+  height: 34px;
   animation: float-up 23s linear infinite;
   animation-delay: -2s;
-  filter: blur(0.6px);
 }
 
-.ascii-float:nth-child(12) {
-  font-size: 0.5rem;
-  opacity: 0.04;
+.duck-float:nth-child(12) {
+  width: 16px;
+  height: 16px;
   animation: float-down 28s linear infinite;
   animation-delay: -16s;
-  filter: blur(1.8px);
 }
 
-.ascii-float:nth-child(13) {
-  font-size: 1rem;
-  opacity: 0.1;
+.duck-float:nth-child(13) {
+  width: 38px;
+  height: 38px;
   animation: float-zigzag 32s linear infinite;
   animation-delay: -8s;
-  filter: blur(0.5px);
 }
 
-.ascii-float:nth-child(14) {
-  font-size: 0.6rem;
-  opacity: 0.07;
+.duck-float:nth-child(14) {
+  width: 20px;
+  height: 20px;
   animation: float-circle 24s linear infinite;
   animation-delay: -13s;
-  filter: blur(1.1px);
 }
 
-.ascii-float:nth-child(15) {
-  font-size: 0.8rem;
-  opacity: 0.08;
+.duck-float:nth-child(15) {
+  width: 28px;
+  height: 28px;
   animation: float-left 29s linear infinite;
   animation-delay: -5s;
-  filter: blur(0.7px);
 }
 
-.ascii-float:nth-child(16) {
-  font-size: 0.7rem;
-  opacity: 0.06;
+.duck-float:nth-child(16) {
+  width: 24px;
+  height: 24px;
   animation: float-right 20s linear infinite;
   animation-delay: -17s;
-  filter: blur(1.4px);
 }
 
-.ascii-float:nth-child(17) {
-  font-size: 0.6rem;
-  opacity: 0.08;
-  animation: float-diagonal 22s linear infinite;
-  animation-delay: -3s;
-  filter: blur(0.7px);
+
+/* Duck icon pixelated styling */
+.pixelated {
+  image-rendering: -moz-crisp-edges;
+  image-rendering: -webkit-crisp-edges;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
 }
 
-.ascii-float:nth-child(18) {
-  font-size: 0.5rem;
-  opacity: 0.05;
-  animation: float-up 26s linear infinite;
-  animation-delay: -19s;
-  filter: blur(1.6px);
-}
+/* Duck theme button and text utilities */
+@layer utilities {
+  .bg-duck-primary {
+    background-color: hsl(var(--primary));
+  }
 
-.ascii-float:nth-child(19) {
-  font-size: 0.9rem;
-  opacity: 0.09;
-  animation: float-down 18s linear infinite;
-  animation-delay: -1s;
-  filter: blur(0.4px);
-}
+  .text-duck-primary {
+    color: hsl(var(--primary));
+  }
 
-.ascii-float:nth-child(20) {
-  font-size: 0.8rem;
-  opacity: 0.07;
-  animation: float-zigzag 31s linear infinite;
-  animation-delay: -22s;
-  filter: blur(1.1px);
-}
+  .border-duck-primary {
+    border-color: hsl(var(--primary));
+  }
 
-.ascii-float:nth-child(21) {
-  font-size: 0.7rem;
-  opacity: 0.06;
-  animation: float-circle 19s linear infinite;
-  animation-delay: -6s;
-  filter: blur(1.3px);
-}
-
-.ascii-float:nth-child(22) {
-  font-size: 1rem;
-  opacity: 0.1;
-  animation: float-left 27s linear infinite;
-  animation-delay: -14s;
-  filter: blur(0.6px);
-}
-
-.ascii-float:nth-child(23) {
-  font-size: 0.6rem;
-  opacity: 0.08;
-  animation: float-right 24s linear infinite;
-  animation-delay: -9s;
-  filter: blur(0.9px);
-}
-
-.ascii-float:nth-child(24) {
-  font-size: 0.8rem;
-  opacity: 0.07;
-  animation: float-diagonal 21s linear infinite;
-  animation-delay: -16s;
-  filter: blur(1.2px);
-}
-
-.ascii-float:nth-child(25) {
-  font-size: 0.9rem;
-  opacity: 0.09;
-  animation: float-up 25s linear infinite;
-  animation-delay: -4s;
-  filter: blur(0.5px);
-}
-
-.ascii-float:nth-child(26) {
-  font-size: 0.5rem;
-  opacity: 0.05;
-  animation: float-down 29s linear infinite;
-  animation-delay: -18s;
-  filter: blur(1.7px);
-}
-
-.ascii-float:nth-child(27) {
-  font-size: 0.7rem;
-  opacity: 0.06;
-  animation: float-zigzag 23s linear infinite;
-  animation-delay: -12s;
-  filter: blur(1.4px);
-}
-
-.ascii-float:nth-child(28) {
-  font-size: 1.1rem;
-  opacity: 0.11;
-  animation: float-circle 33s linear infinite;
-  animation-delay: -7s;
-  filter: blur(0.3px);
-}
-
-.ascii-float:nth-child(29) {
-  font-size: 0.6rem;
-  opacity: 0.08;
-  animation: float-left 26s linear infinite;
-  animation-delay: -20s;
-  filter: blur(1px);
-}
-
-.ascii-float:nth-child(30) {
-  font-size: 0.8rem;
-  opacity: 0.07;
-  animation: float-right 30s linear infinite;
-  animation-delay: -2s;
-  filter: blur(0.8px);
-}
-
-.ascii-float:nth-child(31) {
-  font-size: 0.9rem;
-  opacity: 0.09;
-  animation: float-diagonal 28s linear infinite;
-  animation-delay: -15s;
-  filter: blur(0.6px);
-}
-
-.ascii-float:nth-child(32) {
-  font-size: 0.7rem;
-  opacity: 0.06;
-  animation: float-up 32s linear infinite;
-  animation-delay: -10s;
-  filter: blur(1.5px);
-}
-
-.dark .ascii-float {
-  color: hsl(var(--muted-foreground));
-}
-
-.dark .ascii-float:nth-child(odd) {
-  opacity: 0.18;
-}
-
-.dark .ascii-float:nth-child(even) {
-  opacity: 0.12;
+  .hover\:bg-duck-primary-dark:hover {
+    background-color: hsl(var(--primary) / 0.9);
+  }
 }
