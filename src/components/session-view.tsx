@@ -65,6 +65,7 @@ export function SessionView({ sessionId }: SessionViewProps) {
   const [eventTitle, setEventTitle] = useState<string | null>(null)
   const [signInName, setSignInName] = useState('')
   const [isSignInOpen, setIsSignInOpen] = useState(false)
+  const [isLinkCopied, setIsLinkCopied] = useState(false)
   const router = useRouter()
 
   // Get time range from first schedule, fallback to defaults
@@ -189,7 +190,10 @@ export function SessionView({ sessionId }: SessionViewProps) {
     if (shareUrl) {
       try {
         await navigator.clipboard.writeText(shareUrl)
-        alert('Link copied to clipboard!')
+        setIsLinkCopied(true)
+        setTimeout(() => {
+          setIsLinkCopied(false)
+        }, 2000)
       } catch (err) {
         console.error('Failed to copy:', err)
       }
@@ -243,10 +247,13 @@ export function SessionView({ sessionId }: SessionViewProps) {
         <div className="flex gap-2">
           <Button
             onClick={copyToClipboard}
-            variant="outline" 
-            className="border-primary text-primary hover:bg-gray-50 cursor-pointer"
+            variant={isLinkCopied ? "default" : "outline"}
+            className={isLinkCopied
+              ? "bg-primary text-primary-foreground hover:bg-primary/90 cursor-pointer min-w-[140px]"
+              : "border-primary text-primary hover:bg-gray-50 cursor-pointer min-w-[140px]"
+            }
           >
-            Copy Share Link
+            {isLinkCopied ? "Link Copied! ✓" : "Copy Share Link"}
           </Button>
           
           <Dialog open={isSignInOpen} onOpenChange={setIsSignInOpen}>
