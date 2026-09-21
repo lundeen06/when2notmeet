@@ -2,6 +2,8 @@
 
 A clean, modern scheduling web app that's the opposite of When2Meet - users mark when they're **NOT** available to find the best meeting times.
 
+**Try it:** [when2notmeet.com](https://when2notmeet.com)
+
 ## Features
 
 - **Two-screen workflow**: Name input + day selection → Interactive scheduling grid
